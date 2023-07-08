@@ -14,4 +14,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TennisPlayers.Infastructure\TennisPlayers.Infastructure.csproj" />
+  </ItemGroup>
+
 </Project>
