@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Reflection.Emit;
 using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Infastructure.Context
@@ -7,7 +9,6 @@ namespace TennisPlayers.Infastructure.Context
     {
         public TennisPlayersContext(DbContextOptions<TennisPlayersContext> options) : base(options)
         {
-
         }
 
         public DbSet<Athlete> Athletes { get; set; }
@@ -38,7 +39,7 @@ namespace TennisPlayers.Infastructure.Context
             modelBuilder.Entity<AthleteSponsor>()
                 .HasOne(a => a.Athlete)
                 .WithMany(pc => pc.AthleteSponsors)
-                .HasForeignKey(a => a.PokemonId);
+                .HasForeignKey(a => a.AthleteId);
             modelBuilder.Entity<AthleteSponsor>()
                 .HasOne(s => s.Sponsor)
                 .WithMany(pc => pc.AthleteSponsors)
