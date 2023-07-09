@@ -10,6 +10,9 @@
         public int TotalWins { get; set; }
         public int TotalLoses { get; set; }
         public string Status { get; set; }
-
+        public Country Country { get; set; }
+        public Coach Coach { get; set; }
+        public List<AthleteSponsor> AthleteSponsors { get; set; }
+        public List<AthleteTournament> AthleteTournaments { get; set; }
     }
 }

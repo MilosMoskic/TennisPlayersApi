@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public int NetWorth { get; set; }
+        public List<AthleteSponsor> AthleteSponsors { get; set; }
     }
 }

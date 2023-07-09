@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TennisPlayers.Domain.Models
+﻿namespace TennisPlayers.Domain.Models
 {
-    internal class Tournament
+    public class Tournament
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string SurfaceType { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public Location Location { get; set; }
+        public List<AthleteTournament> AthleteTournaments { get; set; }
     }
 }
