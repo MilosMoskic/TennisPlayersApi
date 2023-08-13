@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
+using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -23,6 +23,8 @@ namespace iTennisPlayersApi.Controllers
         }
 
         [HttpGet("{coachId:int}")]
+        [ProducesResponseType(200, Type = typeof(Coach))]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachById(int coachId)
         {
             if (!_coachService.CoachExists(coachId))
@@ -33,6 +35,8 @@ namespace iTennisPlayersApi.Controllers
         }
 
         [HttpGet("{lastName}")]
+        [ProducesResponseType(200, Type = typeof(Coach))]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachByLastName(string lastName)
         {
             if (!_coachService.CoachExists(lastName))

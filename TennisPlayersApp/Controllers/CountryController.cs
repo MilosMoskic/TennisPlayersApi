@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
+using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -22,6 +22,8 @@ namespace iTennisPlayersApi.Controllers
         }
 
         [HttpGet("{countryId:int}")]
+        [ProducesResponseType(200, Type = typeof(Country))]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryById(int countryId)
         {
             if (!_countryService.CountryExists(countryId))
@@ -32,6 +34,8 @@ namespace iTennisPlayersApi.Controllers
         }
 
         [HttpGet("{countryName}")]
+        [ProducesResponseType(200, Type = typeof(Country))]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryByCountryName(string countryName)
         {
             if (!_countryService.CountryExists(countryName))
