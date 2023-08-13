@@ -19,6 +19,11 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Coaches.Any(c => c.Id == id);
         }
 
+        public bool CoachExists(string lastName)
+        {
+            return _context.Coaches.Any(c => c.LastName== lastName);
+        }
+
         public Task<List<Coach>> GetAllCoaches()
         {
             return _context.Coaches.ToListAsync();
@@ -29,9 +34,9 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Coaches.Where(c => c.Id == id).FirstOrDefault();
         }
 
-        public Coach GetCoach(string lastName)
+        public List<Coach> GetCoach(string lastName)
         {
-            return _context.Coaches.Where(c => c.LastName == lastName).FirstOrDefault();
+            return _context.Coaches.Where(c => c.LastName == lastName).ToList();
         }
     }
 }

@@ -6,6 +6,8 @@ namespace TennisPlayers.Application.Interfaces
     {
         public Task<List<CoachDto>> GetAllCoaches();
         public CoachDto GetCoachById(int id);
+        public Task<List<CoachDto>> GetCoachesByLastName(string lastName);
         public bool CoachExists(int id);
+        public bool CoachExists(string lastName);
     }
 }

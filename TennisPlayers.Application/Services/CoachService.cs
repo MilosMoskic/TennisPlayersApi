@@ -29,9 +29,20 @@ namespace TennisPlayers.Application.Services
             var coachMapper = _mapper.Map<CoachDto>(coach);
             return coachMapper;
         }
+        public async Task<List<CoachDto>> GetCoachesByLastName(string lastName)
+        {
+            var coaches = _coachRepository.GetCoach(lastName);
+            var coachesMapper = _mapper.Map<List<CoachDto>>(coaches);
+            return coachesMapper;
+        }
         public bool CoachExists(int id)
         {
             return _coachRepository.CoachExists(id);
+        }
+
+        public bool CoachExists(string lastName)
+        {
+            return _coachRepository.CoachExists(lastName);
         }
     }
 }
