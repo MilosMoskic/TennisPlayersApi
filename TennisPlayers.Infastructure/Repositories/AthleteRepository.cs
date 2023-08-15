@@ -1,4 +1,6 @@
-﻿using TennisPlayers.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using TennisPlayers.Application.Dto;
+using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Models;
 using TennisPlayers.Infastructure.Context;
 
@@ -26,17 +28,31 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Athletes.Where(a => a.Ranking == ranking).FirstOrDefault();
         }
-
-        public ICollection<Athlete> GetAthletes()
+        public ICollection<Athlete> GetAthletesByTournament(int tournamentId)
         {
-            return _context.Athletes.OrderBy(a => a.LastName).ToList(); 
+            return _context.AthleteTournaments.Where(a => a.TournamentId == tournamentId).Select(a => a.Athlete).ToList();
         }
 
-        public decimal GetAthleteWinPercent(int id)
+        public Task<List<Athlete>> GetAllAthletes()
         {
-            var athlete = _context.Athletes.Where(a => a.Id == id).FirstOrDefault();
+            return _context.Athletes.ToListAsync();
+        }
+
+        public decimal GetAthleteWinPercent(string name)
+        {
+            var athlete = _context.Athletes.Where(a => a.LastName == name).FirstOrDefault();
 
             return (athlete.TotalWins / (athlete.TotalWins + athlete.TotalLoses)) * 100;
+        }
+
+        public bool AthleteExists(int id)
+        {
+            return _context.Athletes.Any(a => a.Id == id);
+        }
+
+        public bool AthleteExists(string name)
+        {
+            return _context.Athletes.Any(a => a.LastName == name);
         }
     }
 }

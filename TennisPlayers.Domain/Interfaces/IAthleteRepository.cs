@@ -4,10 +4,13 @@ namespace TennisPlayers.Domain.Interfaces
 {
     public interface IAthleteRepository
     {
-        ICollection<Athlete> GetAthletes();
+        Task<List<Athlete>> GetAllAthletes();
         Athlete GetAthlete(int id);
         Athlete GetAthlete(string lastName);
         Athlete GetAthleteByRanking(int ranking);
-        decimal GetAthleteWinPercent(int id);
+        public decimal GetAthleteWinPercent(string name);
+        ICollection<Athlete> GetAthletesByTournament(int tournamentId);
+        bool AthleteExists(int id);
+        bool AthleteExists(string name);
     }
 }
