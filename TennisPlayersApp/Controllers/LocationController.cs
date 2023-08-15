@@ -15,14 +15,14 @@ namespace iTennisPlayersApi.Controllers
             _locationService = locationService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllLocations()
         {
             var result = await _locationService.GetAllLocations();
             return Ok(result);
         }
 
-        [HttpGet("{locationId}")]
+        [HttpGet("[action]/{locationId}")]
         [ProducesResponseType(200, Type = typeof(Location))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetLocationById(int locationId)

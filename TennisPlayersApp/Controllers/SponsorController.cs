@@ -15,14 +15,14 @@ namespace iTennisPlayersApi.Controllers
             _sponsorService = sponsorService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllSponsorts()
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllSponsors()
         {
             var result = await _sponsorService.GetAllSponsors();
             return Ok(result);
         }
 
-        [HttpGet("{sponsorId}")]
+        [HttpGet("[action]/{sponsorId}")]
         [ProducesResponseType(200, Type = typeof(Sponsor))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorById(int sponsorId)

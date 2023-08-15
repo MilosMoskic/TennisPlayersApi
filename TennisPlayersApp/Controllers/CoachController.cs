@@ -15,14 +15,14 @@ namespace iTennisPlayersApi.Controllers
             _coachService = coachService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCoaches()
         {
             var result = await _coachService.GetAllCoaches();
             return Ok(result);
         }
 
-        [HttpGet("{coachId:int}")]
+        [HttpGet("[action]/{coachId}")]
         [ProducesResponseType(200, Type = typeof(Coach))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachById(int coachId)
@@ -34,7 +34,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(coach);
         }
 
-        [HttpGet("{lastName}")]
+        [HttpGet("[action]/{lastName}")]
         [ProducesResponseType(200, Type = typeof(Coach))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachByLastName(string lastName)

@@ -15,14 +15,14 @@ namespace iTennisPlayersApi.Controllers
             _tournamentService = tournamentService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllTournaments()
         {
             var result = await _tournamentService.GetAllTournaments();
             return Ok(result);
         }
 
-        [HttpGet("{tournamentId}")]
+        [HttpGet("[action]/{tournamentId}")]
         [ProducesResponseType(200, Type = typeof(Tournament))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTournamentById(int tournamentId)

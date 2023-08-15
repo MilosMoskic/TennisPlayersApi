@@ -14,14 +14,14 @@ namespace iTennisPlayersApi.Controllers
             _countryService = countryService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCountries()
         {
             var result = await _countryService.GetAllCountries();
             return Ok(result);
         }
 
-        [HttpGet("{countryId:int}")]
+        [HttpGet("[action]/{countryId}")]
         [ProducesResponseType(200, Type = typeof(Country))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryById(int countryId)
@@ -33,7 +33,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(coach);
         }
 
-        [HttpGet("{countryName}")]
+        [HttpGet("[action]/{countryName}")]
         [ProducesResponseType(200, Type = typeof(Country))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryByCountryName(string countryName)
