@@ -30,8 +30,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_sponsorService.SponsorExists(sponsorId))
                 return NotFound("Sponsor does not exist");
 
-            var coach = _sponsorService.GetSponsorById(sponsorId);
-            return Ok(coach);
+            var sponsor = _sponsorService.GetSponsorById(sponsorId);
+            return Ok(sponsor);
         }
 
         [HttpGet("[action]/{sponsorName}")]
@@ -42,8 +42,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_sponsorService.SponsorExists(sponsorName))
                 return NotFound("Sponsor does not exist");
 
-            var coach = _sponsorService.GetSponsorByName(sponsorName);
-            return Ok(coach);
+            var sponsor = _sponsorService.GetSponsorByName(sponsorName);
+            return Ok(sponsor);
         }
 
         [HttpGet("[action]/{netWorth}")]
@@ -51,8 +51,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorByNW(decimal netWorth)
         {
-            var coach = await _sponsorService.GetSponsorsByNW(netWorth);
-            return Ok(coach);
+            var sponsor = await _sponsorService.GetSponsorsByNW(netWorth);
+            return Ok(sponsor);
         }
     }
 }

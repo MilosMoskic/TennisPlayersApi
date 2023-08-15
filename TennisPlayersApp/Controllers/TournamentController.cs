@@ -30,8 +30,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_tournamentService.TournamentExists(tournamentId))
                 return NotFound("Tournament does not exist");
 
-            var coach = _tournamentService.GetTournamentById(tournamentId);
-            return Ok(coach);
+            var tournament = _tournamentService.GetTournamentById(tournamentId);
+            return Ok(tournament);
         }
 
         [HttpGet("[action]/{tournamentName}")]
@@ -42,8 +42,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_tournamentService.TournamentExists(tournamentName))
                 return NotFound("Tournament does not exist");
 
-            var coach = _tournamentService.GetTournamentByName(tournamentName);
-            return Ok(coach);
+            var tournament = _tournamentService.GetTournamentByName(tournamentName);
+            return Ok(tournament);
         }
     }
 }

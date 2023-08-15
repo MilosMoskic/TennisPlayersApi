@@ -29,8 +29,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_countryService.CountryExists(countryId))
                 return NotFound("Country does not exist");
 
-            var coach = _countryService.GetCountryById(countryId);
-            return Ok(coach);
+            var country = _countryService.GetCountryById(countryId);
+            return Ok(country);
         }
 
         [HttpGet("[action]/{countryName}")]
@@ -41,8 +41,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_countryService.CountryExists(countryName))
                 return NotFound("Country does not exist");
 
-            var coach = _countryService.GetCountryByName(countryName);
-            return Ok(coach);
+            var country = _countryService.GetCountryByName(countryName);
+            return Ok(country);
         }
     }
 }

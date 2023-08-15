@@ -30,8 +30,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_locationService.LocationExists(locationId))
                 return NotFound("Location does not exist");
 
-            var coach = _locationService.GetLocationById(locationId);
-            return Ok(coach);
+            var location = _locationService.GetLocationById(locationId);
+            return Ok(location);
         }
 
         [HttpGet("[action]/{locationName}")]
@@ -42,8 +42,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_locationService.LocationExists(locationName))
                 return NotFound("Location does not exist");
 
-            var coach = _locationService.GetLocationByName(locationName);
-            return Ok(coach);
+            var location = _locationService.GetLocationByName(locationName);
+            return Ok(location);
         }
     }
 }
