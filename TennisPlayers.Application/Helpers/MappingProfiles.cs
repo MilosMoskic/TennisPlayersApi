@@ -13,6 +13,7 @@ namespace TennisPlayers.Application.Helpers
             CreateMap<Country, CountryDto>();
             CreateMap<Sponsor, SponsorDto>();
             CreateMap<Location, LocationDto>();
+            CreateMap<Tournament, TournamentDto>();
         }
     }
 }
