@@ -14,6 +14,12 @@ namespace TennisPlayers.Infastructure.Repositories
             _context = context;
         }
 
+        public bool AddCountry(Country country)
+        {
+            _context.Countries.Add(country);
+            return Save();
+        }
+
         public bool CountryExists(int id)
         {
             return _context.Countries.Any(c => c.Id == id);
@@ -37,6 +43,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public Country GetCountry(string name)
         {
             return _context.Countries.Where(c => c.Name == name).FirstOrDefault();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

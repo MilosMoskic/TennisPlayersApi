@@ -9,5 +9,7 @@ namespace TennisPlayers.Domain.Interfaces
         Country GetCountry(string name);
         bool CountryExists(int id);
         bool CountryExists(string country);
+        bool AddCountry(Country country);
+        bool Save();
     }
 }
