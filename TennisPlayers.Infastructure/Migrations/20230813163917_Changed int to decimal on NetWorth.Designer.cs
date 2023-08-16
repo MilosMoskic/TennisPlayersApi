@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TennisPlayers.Infastructure.Context;
 
@@ -11,9 +12,11 @@ using TennisPlayers.Infastructure.Context;
 namespace TennisPlayers.Infastructure.Migrations
 {
     [DbContext(typeof(TennisPlayersContext))]
-    partial class TennisPlayersContextModelSnapshot : ModelSnapshot
+    [Migration("20230813163917_Changed int to decimal on NetWorth")]
+    partial class ChangedinttodecimalonNetWorth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +50,7 @@ namespace TennisPlayers.Infastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Ranking")
+                    b.Property<int>("Ranking")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
