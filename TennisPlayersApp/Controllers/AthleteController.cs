@@ -14,11 +14,19 @@ namespace iTennisPlayersApi.Controllers
         private readonly IAthleteService _athleteService;
         private readonly ITournamentService _tournamentService;
         private readonly ISponsorService _sponsorService;
+        private readonly ICoachService _coachService;
+        private readonly ICountryService _countryService;
 
-        public AthleteController(IAthleteService athleteService, ITournamentService tournamentService, ISponsorService sponsorService)
+        public AthleteController(IAthleteService athleteService,
+            ITournamentService tournamentService,
+            ICoachService coachService,
+            ICountryService countryService,
+            ISponsorService sponsorService)
         {
             _athleteService = athleteService;
             _tournamentService = tournamentService;
+            _coachService = coachService;
+            _countryService = countryService;
             _sponsorService = sponsorService;
         }
 
@@ -108,6 +116,12 @@ namespace iTennisPlayersApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!_countryService.CountryExists(countryId))
+                return NotFound("Country does not exist");
+
+            if (!_coachService.CoachExists(coachId))
+                return NotFound("Coach does not exist");
 
             if (!_athleteService.AddAthlete(coachId, countryId, athleteDto))
             {
