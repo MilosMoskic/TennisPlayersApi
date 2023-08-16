@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
@@ -53,6 +54,23 @@ namespace iTennisPlayersApi.Controllers
         {
             var sponsor = await _sponsorService.GetSponsorsByNW(netWorth);
             return Ok(sponsor);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddSponsor([FromBody] SponsorDto sponsorDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_sponsorService.AddSponsor(sponsorDto))
+            {
+                ModelState.AddModelError("", "Error adding new sponsor.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Sponsor added successfully.");
         }
     }
 }

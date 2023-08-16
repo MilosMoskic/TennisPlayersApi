@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Interfaces;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Services
 {
@@ -14,6 +15,13 @@ namespace TennisPlayers.Application.Services
             _sponsorRepository = sponsorRepository;
             _mapper = mapper;
         }
+
+        public bool AddSponsor(SponsorDto sponsorDto)
+        {
+            var sponsorMapped = _mapper.Map<Sponsor>(sponsorDto);
+            return _sponsorRepository.AddSponsor(sponsorMapped);
+        }
+
         public async Task<List<SponsorDto>> GetAllSponsors()
         {
             var sponsors = await _sponsorRepository.GetSponsors();

@@ -10,5 +10,7 @@ namespace TennisPlayers.Domain.Interfaces
         Task<List<Sponsor>> GetAllSponsorsByNW(decimal netWorth);
         bool SponsorExists(int id);
         bool SponsorExists(string sponsor);
+        bool AddSponsor(Sponsor sponsor);
+        bool Save();
     }
 }
