@@ -36,5 +36,17 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Locations.Any(l => l.CityName == name);
         }
+
+        public bool AddLocation(Location location)
+        {
+            _context.Locations.Add(location);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

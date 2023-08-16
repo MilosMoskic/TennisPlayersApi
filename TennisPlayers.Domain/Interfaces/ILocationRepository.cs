@@ -9,5 +9,7 @@ namespace TennisPlayers.Domain.Interfaces
         Location GetLocation(string name);
         bool LocationExists(int id);
         bool LocationExists(string name);
+        bool AddLocation(Location location);
+        bool Save();
     }
 }
