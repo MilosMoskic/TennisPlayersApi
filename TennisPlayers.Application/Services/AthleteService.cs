@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Interfaces;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Services
 {
@@ -52,6 +53,13 @@ namespace TennisPlayers.Application.Services
             var athlete = _athleteRepository.GetAthlete(ranking);
             var athleteMapped = _mapper.Map<AthleteDto>(athlete);
             return athleteMapped;
+        }
+
+        public async Task<List<AthleteDto>> GetAthletesBySponsor(int sponsorId)
+        {
+            var athletes = _athleteRepository.GetAthletesBySponsor(sponsorId);
+            var athletesMapped = _mapper.Map<List<AthleteDto>>(athletes);
+            return athletesMapped;
         }
 
         public async Task<List<AthleteDto>> GetAthletesByTournament(int tournamentId)

@@ -10,6 +10,7 @@ namespace TennisPlayers.Domain.Interfaces
         Athlete GetAthleteByRanking(int ranking);
         public decimal GetAthleteWinPercent(string name);
         ICollection<Athlete> GetAthletesByTournament(int tournamentId);
+        ICollection<Athlete> GetAthletesBySponsor(int sponsorId);
         bool AthleteExists(int id);
         bool AthleteExists(string name);
     }

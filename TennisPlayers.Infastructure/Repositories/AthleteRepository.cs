@@ -41,8 +41,10 @@ namespace TennisPlayers.Infastructure.Repositories
         public decimal GetAthleteWinPercent(string name)
         {
             var athlete = _context.Athletes.Where(a => a.LastName == name).FirstOrDefault();
-
-            return (athlete.TotalWins / (athlete.TotalWins + athlete.TotalLoses)) * 100;
+            decimal wins = Convert.ToDecimal(athlete.TotalWins);
+            decimal loses = Convert.ToDecimal(athlete.TotalLoses);
+            decimal winPercent = (wins / (wins + loses)) * 100;
+            return winPercent;
         }
 
         public bool AthleteExists(int id)
@@ -53,6 +55,11 @@ namespace TennisPlayers.Infastructure.Repositories
         public bool AthleteExists(string name)
         {
             return _context.Athletes.Any(a => a.LastName == name);
+        }
+
+        public ICollection<Athlete> GetAthletesBySponsor(int sponsorId)
+        {
+            return _context.AthleteSponsors.Where(a => a.SponsorId == sponsorId).Select(a => a.Athlete).ToList();
         }
     }
 }

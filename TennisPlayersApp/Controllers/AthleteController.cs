@@ -11,11 +11,13 @@ namespace iTennisPlayersApi.Controllers
     {
         private readonly IAthleteService _athleteService;
         private readonly ITournamentService _tournamentService;
+        private readonly ISponsorService _sponsorService;
 
-        public AthleteController(IAthleteService athleteService, ITournamentService tournamentService)
+        public AthleteController(IAthleteService athleteService, ITournamentService tournamentService, ISponsorService sponsorService)
         {
             _athleteService = athleteService;
             _tournamentService = tournamentService;
+            _sponsorService = sponsorService;
         }
 
         [HttpGet("[action]")]
@@ -33,8 +35,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_athleteService.AthleteExists(athleteId))
                 return NotFound("Athlete does not exist");
 
-            var coach = _athleteService.GetAthleteById(athleteId);
-            return Ok(coach);
+            var athlete = _athleteService.GetAthleteById(athleteId);
+            return Ok(athlete);
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -45,8 +47,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_athleteService.AthleteExists(lastName))
                 return NotFound("Athlete does not exist");
 
-            var coach = _athleteService.GetAthleteByName(lastName);
-            return Ok(coach);
+            var athlete = _athleteService.GetAthleteByName(lastName);
+            return Ok(athlete);
         }
 
         [HttpGet("[action]/{ranking}")]
@@ -57,8 +59,8 @@ namespace iTennisPlayersApi.Controllers
             if (!_athleteService.AthleteExists(ranking))
                 return NotFound("Athlete does not exist");
 
-            var coach = _athleteService.GetAthleteByRanking(ranking);
-            return Ok(coach);
+            var athlete = _athleteService.GetAthleteByRanking(ranking);
+            return Ok(athlete);
         }
 
         [HttpGet("[action]/{tournamentId}")]
@@ -69,20 +71,32 @@ namespace iTennisPlayersApi.Controllers
             if (!_tournamentService.TournamentExists(tournamentId))
                 return NotFound("Tournament does not exist");
 
-            var coach = _athleteService.GetAthletesByTournament(tournamentId);
-            return Ok(coach);
+            var athlete = _athleteService.GetAthletesByTournament(tournamentId);
+            return Ok(athlete);
+        }
+
+        [HttpGet("[action]/{sponsorId}")]
+        [ProducesResponseType(200, Type = typeof(Athlete))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetAthleteBySponsor(int sponsorId)
+        {
+            if (!_sponsorService.SponsorExists(sponsorId))
+                return NotFound("Sponsor does not exist");
+
+            var athlete = _athleteService.GetAthletesBySponsor(sponsorId);
+            return Ok(athlete);
         }
 
         [HttpGet("[action]/{lastName}")]
         [ProducesResponseType(200, Type = typeof(Athlete))]
         [ProducesResponseType(400)]
-        public IActionResult GetAthletesWinPercent(string lastname)
+        public IActionResult GetAthletesWinPercent(string lastName)
         {
-            if (!_athleteService.AthleteExists(lastname))
+            if (!_athleteService.AthleteExists(lastName))
                 return NotFound("Athlete does not exist");
 
-            var coach = _athleteService.GetAthleteWinPercent(lastname);
-            return Ok(coach);
+            var athlete = _athleteService.GetAthleteWinPercent(lastName);
+            return Ok(athlete);
         }
     }
 }
