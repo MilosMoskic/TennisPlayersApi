@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Interfaces;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Services
 {
@@ -43,6 +44,12 @@ namespace TennisPlayers.Application.Services
         public bool CoachExists(string lastName)
         {
             return _coachRepository.CoachExists(lastName);
+        }
+
+        public bool AddCoach(CoachDto coachDto)
+        {
+            var coachMapped = _mapper.Map<Coach>(coachDto);
+            return _coachRepository.AddCoach(coachMapped);
         }
     }
 }

@@ -14,6 +14,12 @@ namespace TennisPlayers.Infastructure.Repositories
             _context = context;
         }
 
+        public bool AddCoach(Coach coach)
+        {
+            _context.Coaches.Add(coach);
+            return Save();
+        }
+
         public bool CoachExists(int id)
         {
             return _context.Coaches.Any(c => c.Id == id);
@@ -37,6 +43,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public List<Coach> GetCoach(string lastName)
         {
             return _context.Coaches.Where(c => c.LastName == lastName).ToList();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }
