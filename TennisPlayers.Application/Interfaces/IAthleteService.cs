@@ -13,5 +13,6 @@ namespace TennisPlayers.Application.Interfaces
         public decimal GetAthleteWinPercent(string name);
         public bool AthleteExists(int id);
         public bool AthleteExists(string name);
+        public bool AddAthlete(int coachId, int countryId, AthleteDto athlete);
     }
 }

@@ -9,12 +9,25 @@ namespace TennisPlayers.Application.Services
     public class AthleteService : IAthleteService
     {
         private readonly IAthleteRepository _athleteRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly ICoachRepository _coachRepository;
         private readonly IMapper _mapper;
 
-        public AthleteService(IAthleteRepository athleteRepository, IMapper mapper)
+        public AthleteService(IAthleteRepository athleteRepository,ICoachRepository coachRepository,ICountryRepository countryRepository, IMapper mapper)
         {
             _athleteRepository = athleteRepository;
+            _coachRepository = coachRepository;
+            _countryRepository = countryRepository;
             _mapper = mapper;
+        }
+
+        public bool AddAthlete(int coachId, int countryId, AthleteDto athlete)
+        {
+            var coach = _coachRepository.GetCoach(coachId);
+            var country = _countryRepository.GetCountry(countryId);
+
+            var athleteMapped = _mapper.Map<Athlete>(athlete);
+            return _athleteRepository.AddAthlete(coach, country, athleteMapped);
         }
 
         public bool AthleteExists(int id)

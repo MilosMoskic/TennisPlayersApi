@@ -13,5 +13,7 @@ namespace TennisPlayers.Domain.Interfaces
         ICollection<Athlete> GetAthletesBySponsor(int sponsorId);
         bool AthleteExists(int id);
         bool AthleteExists(string name);
+        bool AddAthlete(Coach coach, Country country, Athlete athlete);
+        bool Save();
     }
 }

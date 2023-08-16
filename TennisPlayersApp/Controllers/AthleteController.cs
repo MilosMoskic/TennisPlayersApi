@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Models;
 
@@ -97,6 +99,23 @@ namespace iTennisPlayersApi.Controllers
 
             var athlete = _athleteService.GetAthleteWinPercent(lastName);
             return Ok(athlete);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddAthelete([FromQuery] int countryId, [FromQuery] int coachId, [FromBody] AthleteDto athleteDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_athleteService.AddAthlete(coachId, countryId, athleteDto))
+            {
+                ModelState.AddModelError("", "Error adding new athlete.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Athlete added successfully.");
         }
     }
 }

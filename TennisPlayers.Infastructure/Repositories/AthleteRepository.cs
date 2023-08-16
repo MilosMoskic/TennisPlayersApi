@@ -61,5 +61,19 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.AthleteSponsors.Where(a => a.SponsorId == sponsorId).Select(a => a.Athlete).ToList();
         }
+
+        public bool AddAthlete(Coach coach, Country country, Athlete athlete)
+        {
+            athlete.Coach = coach;
+            athlete.Country = country;
+            _context.Athletes.Add(athlete);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }
