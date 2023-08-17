@@ -58,7 +58,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist");
+                return NotFound("Tournament does not exist");
 
             if (!_tournamentService.AddTournament(locationId, tournamentDto))
             {
