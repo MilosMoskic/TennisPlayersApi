@@ -63,5 +63,20 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Location added successfully.");
         }
+
+        [HttpPut]
+        public IActionResult UpdateLocation(int locationId, [FromBody] LocationDto locationDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_locationService.LocationExists(locationId))
+                return NotFound("Location does not exist.");
+
+            if (!_locationService.UpdateLocation(locationId, locationDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
+        }
     }
 }
