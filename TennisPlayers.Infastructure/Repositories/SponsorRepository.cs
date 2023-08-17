@@ -66,5 +66,11 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Sponsors.Any(s => s.Name == sponsor);
         }
+
+        public bool UpdateSponsor(Sponsor sponsor)
+        {
+            _context.Update(sponsor);
+            return Save();
+        }
     }
 }

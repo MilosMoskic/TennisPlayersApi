@@ -97,5 +97,20 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Successfully added Sponsor to Athlete.");
         }
+
+        [HttpPut]
+        public IActionResult UpdateSponsor(int sponsorId, [FromBody] SponsorDto sponsorDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_sponsorService.SponsorExists(sponsorId))
+                return NotFound("Sponsor does not exist.");
+
+            if (!_sponsorService.UpdateSponsor(sponsorId, sponsorDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
+        }
     }
 }
