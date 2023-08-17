@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Interfaces;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Services
 {
@@ -13,6 +14,12 @@ namespace TennisPlayers.Application.Services
         {
             _countryRepository = countryRepository;
             _mapper = mapper;
+        }
+
+        public bool AddCountry(CountryDto countryDto)
+        {
+            var countryMapped = _mapper.Map<Country>(countryDto);
+            return _countryRepository.AddCountry(countryMapped);
         }
 
         public bool CountryExists(int id)

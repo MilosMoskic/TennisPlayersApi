@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
@@ -44,6 +45,23 @@ namespace iTennisPlayersApi.Controllers
 
             var location = _locationService.GetLocationByName(locationName);
             return Ok(location);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddLocation([FromBody] LocationDto locationDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_locationService.AddLocation(locationDto))
+            {
+                ModelState.AddModelError("", "Error adding new location.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Location added successfully.");
         }
     }
 }

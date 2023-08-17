@@ -9,5 +9,7 @@ namespace TennisPlayers.Domain.Interfaces
         Tournament GetTournament(string name);
         bool TournamentExists(int id);
         bool TournamentExists(string name);
+        bool AddTournament(Location location, Tournament tournament);
+        bool Save();
     }
 }

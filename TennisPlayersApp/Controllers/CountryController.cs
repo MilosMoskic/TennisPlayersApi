@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Models;
 
@@ -43,6 +44,24 @@ namespace iTennisPlayersApi.Controllers
 
             var country = _countryService.GetCountryByName(countryName);
             return Ok(country);
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddCountry([FromBody] CountryDto countryDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_countryService.AddCountry(countryDto))
+            {
+                ModelState.AddModelError("", "Error adding new country.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Country added successfully.");
         }
     }
 }

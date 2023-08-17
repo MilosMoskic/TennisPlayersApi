@@ -9,5 +9,6 @@ namespace TennisPlayers.Application.Interfaces
         public LocationDto GetLocationByName(string name);
         public bool LocationExists(int id);
         public bool LocationExists(string name);
+        public bool AddLocation(LocationDto locationDto);
     }
 }

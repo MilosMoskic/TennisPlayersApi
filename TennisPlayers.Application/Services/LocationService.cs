@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Domain.Interfaces;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Services
 {
@@ -14,6 +15,13 @@ namespace TennisPlayers.Application.Services
             _locationRepository = locationRepository;
             _mapper = mapper;
         }
+
+        public bool AddLocation(LocationDto locationDto)
+        {
+            var locationMapped = _mapper.Map<Location>(locationDto);
+            return _locationRepository.AddLocation(locationMapped);
+        }
+
         public async Task<List<LocationDto>> GetAllLocations()
         {
             var locations = await _locationRepository.GetAllLocations();

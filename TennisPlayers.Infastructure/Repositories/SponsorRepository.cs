@@ -13,6 +13,24 @@ namespace TennisPlayers.Infastructure.Repositories
             _context = context;
         }
 
+        public bool AddSponsor(Sponsor sponsor)
+        {
+            _context.Sponsors.Add(sponsor);
+            return Save();
+        }
+
+        public bool AddSponsorToAthlete(Athlete athlete, Sponsor sponsor)
+        {
+            var athleteSponsors = new AthleteSponsor()
+            {
+                Athlete = athlete,
+                Sponsor = sponsor,
+            };
+
+            _context.AthleteSponsors.Add(athleteSponsors);
+            return Save();
+        }
+
         public Task<List<Sponsor>> GetAllSponsorsByNW(decimal netWorth)
         {
             return _context.Sponsors.Where(s => s.NetWorth >= netWorth).ToListAsync();
@@ -31,6 +49,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public Task<List<Sponsor>> GetSponsors()
         {
             return _context.Sponsors.ToListAsync();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
 
         public bool SponsorExists(int id)

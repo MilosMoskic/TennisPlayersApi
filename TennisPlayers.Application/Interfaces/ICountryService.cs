@@ -9,5 +9,6 @@ namespace TennisPlayers.Application.Interfaces
         public CountryDto GetCountryByName(string name);
         public bool CountryExists(int id);
         public bool CountryExists(string country);
+        public bool AddCountry(CountryDto countryDto);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
@@ -44,6 +46,23 @@ namespace iTennisPlayersApi.Controllers
 
             var coach = await _coachService.GetCoachesByLastName(lastName);
             return Ok(coach);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddCoach([FromBody] CoachDto coachDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_coachService.AddCoach(coachDto))
+            {
+                ModelState.AddModelError("", "Error adding new coach.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Coach added successfully.");
         }
     }
 }

@@ -9,5 +9,7 @@ namespace TennisPlayers.Domain.Interfaces
         List<Coach> GetCoach(string lastName);
         bool CoachExists(int id);
         bool CoachExists(string lastName);
+        bool AddCoach(Coach coach);
+        bool Save();
     }
 }

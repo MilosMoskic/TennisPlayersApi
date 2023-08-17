@@ -9,11 +9,17 @@ namespace TennisPlayers.Application.Helpers
         public MappingProfiles()
         {
             CreateMap<Athlete, AthleteDto>();
+            CreateMap<AthleteDto, Athlete>();
             CreateMap<Coach, CoachDto>();
+            CreateMap<CoachDto, Coach>();
             CreateMap<Country, CountryDto>();
+            CreateMap<CountryDto, Country>();
             CreateMap<Sponsor, SponsorDto>();
+            CreateMap<SponsorDto, Sponsor>();
             CreateMap<Location, LocationDto>();
+            CreateMap<LocationDto, Location>();
             CreateMap<Tournament, TournamentDto>();
+            CreateMap<TournamentDto, Tournament>();
         }
     }
 }

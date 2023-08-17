@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
@@ -10,9 +11,11 @@ namespace iTennisPlayersApi.Controllers
     public class SponsorController : Controller
     {
         public readonly ISponsorService _sponsorService;
-        public SponsorController(ISponsorService sponsorService)
+        public readonly IAthleteService _athleteService;
+        public SponsorController(ISponsorService sponsorService, IAthleteService athleteService)
         {
             _sponsorService = sponsorService;
+            _athleteService = athleteService;
         }
 
         [HttpGet("[action]")]
@@ -53,6 +56,46 @@ namespace iTennisPlayersApi.Controllers
         {
             var sponsor = await _sponsorService.GetSponsorsByNW(netWorth);
             return Ok(sponsor);
+        }
+
+        [HttpPost("AddSponsor")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddSponsor([FromBody] SponsorDto sponsorDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_sponsorService.AddSponsor(sponsorDto))
+            {
+                ModelState.AddModelError("", "Error adding new sponsor.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Sponsor added successfully.");
+        }
+
+        [HttpPost("AddSponsorToAthlete")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddSponsorToAthlete([FromQuery] int athleteId, int sponsorId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_athleteService.AthleteExists(athleteId))
+                return NotFound("Athlete does not exist");
+
+            if (!_sponsorService.SponsorExists(sponsorId))
+                return NotFound("Sponsor does not exist");
+
+            if (!_sponsorService.AddSponsorToAthlete(athleteId, sponsorId))
+            {
+                ModelState.AddModelError("", "Error adding thlete to sponsor.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Successfully added Sponsor to Athlete.");
         }
     }
 }
