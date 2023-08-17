@@ -52,5 +52,11 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Tournaments.Any(t => t.Name == name);
         }
+
+        public bool UpdateTournament(Tournament tournament)
+        {
+            _context.Update(tournament);
+            return Save();
+        }
     }
 }

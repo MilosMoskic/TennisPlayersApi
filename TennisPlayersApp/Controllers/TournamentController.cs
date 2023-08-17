@@ -68,5 +68,20 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Tournament added successfully.");
         }
+
+        [HttpPut]
+        public IActionResult UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_tournamentService.TournamentExists(tournamentId))
+                return NotFound("Tournament does not exist.");
+
+            if (!_tournamentService.UpdateTournament(tournamentId, tournamentDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
+        }
     }
 }
