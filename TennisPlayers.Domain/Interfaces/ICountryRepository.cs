@@ -10,6 +10,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool CountryExists(int id);
         bool CountryExists(string country);
         bool AddCountry(Country country);
+        bool UpdateCountry(Country country);
         bool Save();
     }
 }

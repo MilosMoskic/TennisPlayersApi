@@ -52,5 +52,13 @@ namespace TennisPlayers.Application.Services
             var countryMapper = _mapper.Map<CountryDto>(country);
             return countryMapper;
         }
+
+        public bool UpdateCountry(int countryId, CountryDto countryDto)
+        {
+            var countryMapped = _mapper.Map<Country>(countryDto);
+            countryMapped.Id = countryId;
+
+            return _countryRepository.UpdateCountry(countryMapped);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
@@ -62,6 +63,21 @@ namespace iTennisPlayersApi.Controllers
             }
 
             return Ok("Country added successfully.");
+        }
+
+        [HttpPut]
+        public IActionResult UpdateCountry(int countryId, [FromBody] CountryDto countryDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_countryService.CountryExists(countryId))
+                return NotFound("Country does not exist.");
+
+            if (!_countryService.UpdateCountry(countryId, countryDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
         }
     }
 }
