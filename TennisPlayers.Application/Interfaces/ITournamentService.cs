@@ -9,5 +9,6 @@ namespace TennisPlayers.Application.Interfaces
         public TournamentDto GetTournamentByName(string name);
         public bool TournamentExists(int id);
         public bool TournamentExists(string name);
+        public bool AddTournament(int locationId, TournamentDto tournament);
     }
 }

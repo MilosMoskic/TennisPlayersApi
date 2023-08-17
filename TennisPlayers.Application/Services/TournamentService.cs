@@ -9,11 +9,21 @@ namespace TennisPlayers.Application.Services
     public class TournamentService : ITournamentService
     {
         private readonly ITournamentRepository _tournamentRepository;
+        private readonly ILocationRepository _locationRepository;
         private readonly IMapper _mapper;
-        public TournamentService(ITournamentRepository tournamentRepository, IMapper mapper)
+        public TournamentService(ITournamentRepository tournamentRepository,ILocationRepository locationRepository, IMapper mapper)
         {
             _tournamentRepository = tournamentRepository;
+            _locationRepository = locationRepository;
             _mapper = mapper;
+        }
+
+        public bool AddTournament(int locationId, TournamentDto tournament)
+        {
+            var location = _locationRepository.GetLocation(locationId);
+
+            var tournamentMapped = _mapper.Map<Tournament>(tournament);
+            return _tournamentRepository.AddTournament(location, tournamentMapped);
         }
 
         public async Task<List<TournamentDto>> GetAllTournaments()

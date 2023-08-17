@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
@@ -10,9 +11,11 @@ namespace iTennisPlayersApi.Controllers
     public class TournamentController : Controller
     {
         private readonly ITournamentService _tournamentService;
-        public TournamentController(ITournamentService tournamentService)
+        private readonly ILocationService _locationService;
+        public TournamentController(ITournamentService tournamentService, ILocationService locationService)
         {
             _tournamentService = tournamentService;
+            _locationService = locationService;
         }
 
         [HttpGet("[action]")]
@@ -44,6 +47,26 @@ namespace iTennisPlayersApi.Controllers
 
             var tournament = _tournamentService.GetTournamentByName(tournamentName);
             return Ok(tournament);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_locationService.LocationExists(locationId))
+                return NotFound("Location does not exist");
+
+            if (!_tournamentService.AddTournament(locationId, tournamentDto))
+            {
+                ModelState.AddModelError("", "Error adding new tournament.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Tournament added successfully.");
         }
     }
 }

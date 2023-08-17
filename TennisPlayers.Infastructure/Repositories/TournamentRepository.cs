@@ -15,6 +15,13 @@ namespace TennisPlayers.Infastructure.Repositories
             _context = context;
         }
 
+        public bool AddTournament(Location location, Tournament tournament)
+        {
+            tournament.Location = location;
+            _context.Tournaments.Add(tournament);
+            return Save();
+        }
+
         public Tournament GetTournament(int id)
         {
             return _context.Tournaments.Where(t => t.Id == id).FirstOrDefault();
@@ -28,6 +35,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public Task<List<Tournament>> GetTournaments()
         {
             return _context.Tournaments.ToListAsync();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
 
         public bool TournamentExists(int id)
