@@ -50,5 +50,11 @@ namespace TennisPlayers.Infastructure.Repositories
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public bool UpdateCoach(Coach coach)
+        {
+            _context.Update(coach);
+            return Save();
+        }
     }
 }

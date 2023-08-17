@@ -64,5 +64,20 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Coach added successfully.");
         }
+
+        [HttpPut]
+        public IActionResult UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_coachService.CoachExists(coachId))
+                return NotFound("Coach does not exist.");
+
+            if (!_coachService.UpdateCoach(coachId, coachDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
+        }
     }
 }

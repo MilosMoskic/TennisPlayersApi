@@ -10,5 +10,6 @@ namespace TennisPlayers.Application.Interfaces
         public bool CoachExists(int id);
         public bool CoachExists(string lastName);
         public bool AddCoach(CoachDto coachDto);
+        public bool UpdateCoach(int coachId, CoachDto coachDto);
     }
 }
