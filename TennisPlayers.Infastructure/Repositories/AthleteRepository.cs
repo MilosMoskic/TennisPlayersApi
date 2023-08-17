@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TennisPlayers.Application.Dto;
 using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Models;
 using TennisPlayers.Infastructure.Context;
@@ -67,6 +66,17 @@ namespace TennisPlayers.Infastructure.Repositories
             athlete.Coach = coach;
             athlete.Country = country;
             _context.Athletes.Add(athlete);
+            return Save();
+        }
+        public bool AddAthleteToTournament(Athlete athlete, Tournament tournament)
+        {
+            var athleteTournament = new AthleteTournament()
+            {
+                Athlete = athlete,
+                Tournament = tournament,
+            };
+
+            _context.AthleteTournaments.Add(athleteTournament);
             return Save();
         }
 

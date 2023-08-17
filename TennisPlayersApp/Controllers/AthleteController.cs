@@ -109,7 +109,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(athlete);
         }
 
-        [HttpPost]
+        [HttpPost("AddAthelete")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddAthelete([FromQuery] int countryId, [FromQuery] int coachId, [FromBody] AthleteDto athleteDto)
@@ -130,6 +130,29 @@ namespace iTennisPlayersApi.Controllers
             }
 
             return Ok("Athlete added successfully.");
+        }
+
+        [HttpPost("AddAtheleteToTournament")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult AddAthleteToTournament([FromQuery] int athleteId, [FromQuery] int tournamentId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_athleteService.AthleteExists(athleteId))
+                return NotFound("Athlete does not exist");
+
+            if (!_tournamentService.TournamentExists(tournamentId))
+                return NotFound("Tournament does not exist");
+
+            if (!_athleteService.AddAthleteToTournament(athleteId, tournamentId))
+            {
+                ModelState.AddModelError("", "Error adding athlete to tournament.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Successfully added Athlete to a Tournament.");
         }
     }
 }
