@@ -101,5 +101,13 @@ namespace TennisPlayers.Application.Services
             var athlete = _athleteRepository.GetAthleteWinPercent(name);
             return athlete;
         }
+
+        public bool UpdateAthlete(int athleteId, AthleteDto athleteDto)
+        {
+            var athleteMapped = _mapper.Map<Athlete>(athleteDto);
+            athleteMapped.Id = athleteId;
+
+            return _athleteRepository.UpdateAthlete(athleteMapped);
+        }
     }
 }

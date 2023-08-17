@@ -71,5 +71,13 @@ namespace TennisPlayers.Application.Services
         {
             return _sponsorRepository.SponsorExists(sponsor);
         }
+
+        public bool UpdateSponsor(int sponsorId, SponsorDto sponsorDto)
+        {
+            var sponsorMapped = _mapper.Map<Sponsor>(sponsorDto);
+            sponsorDto.Id = sponsorId;
+
+            return _sponsorRepository.UpdateSponsor(sponsorMapped);
+        }
     }
 }

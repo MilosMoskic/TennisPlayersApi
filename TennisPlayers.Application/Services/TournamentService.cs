@@ -56,5 +56,13 @@ namespace TennisPlayers.Application.Services
         {
             return _tournamentRepository.TournamentExists(name);
         }
+
+        public bool UpdateTournament(int tournamentId, TournamentDto tournamentDto)
+        {
+            var tournamentMapped = _mapper.Map<Tournament>(tournamentDto);
+            tournamentMapped.Id = tournamentId;
+
+            return _tournamentRepository.UpdateTournament(tournamentMapped);
+        }
     }
 }

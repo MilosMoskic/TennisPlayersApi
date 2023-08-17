@@ -12,5 +12,6 @@ namespace TennisPlayers.Application.Interfaces
         public Task<List<SponsorDto>> GetSponsorsByNW(decimal NW);
         public bool AddSponsor(SponsorDto sponsorDto);
         public bool AddSponsorToAthlete(int athleteId, int sponsorId);
+        public bool UpdateSponsor(int sponsorId, SponsorDto sponsorDto);
     }
 }

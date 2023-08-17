@@ -49,7 +49,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(tournament);
         }
 
-        [HttpPost]
+        [HttpPost("AddTournament")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
@@ -58,7 +58,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist");
+                return NotFound("Tournament does not exist");
 
             if (!_tournamentService.AddTournament(locationId, tournamentDto))
             {
@@ -67,6 +67,21 @@ namespace iTennisPlayersApi.Controllers
             }
 
             return Ok("Tournament added successfully.");
+        }
+
+        [HttpPut("UpdateTournament")]
+        public IActionResult UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_tournamentService.TournamentExists(tournamentId))
+                return NotFound("Tournament does not exist.");
+
+            if (!_tournamentService.UpdateTournament(tournamentId, tournamentDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
         }
     }
 }

@@ -51,5 +51,13 @@ namespace TennisPlayers.Application.Services
             var coachMapped = _mapper.Map<Coach>(coachDto);
             return _coachRepository.AddCoach(coachMapped);
         }
+
+        public bool UpdateCoach(int coachId, CoachDto coachDto)
+        {
+            var coachMapped = _mapper.Map<Coach>(coachDto);
+            coachMapped.Id = coachId;
+
+            return _coachRepository.UpdateCoach(coachMapped);
+        }
     }
 }

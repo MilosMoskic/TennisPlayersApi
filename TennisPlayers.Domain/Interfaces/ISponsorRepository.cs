@@ -12,6 +12,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool SponsorExists(string sponsor);
         bool AddSponsor(Sponsor sponsor);
         bool AddSponsorToAthlete(Athlete athlete, Sponsor sponsor);
+        bool UpdateSponsor(Sponsor sponsor);
         bool Save();
     }
 }

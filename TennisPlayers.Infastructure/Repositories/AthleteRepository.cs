@@ -85,5 +85,11 @@ namespace TennisPlayers.Infastructure.Repositories
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public bool UpdateAthlete(Athlete athlete)
+        {
+            _context.Update(athlete);
+            return Save();
+        }
     }
 }

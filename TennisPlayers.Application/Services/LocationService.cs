@@ -50,5 +50,13 @@ namespace TennisPlayers.Application.Services
         {
             return _locationRepository.LocationExists(name);
         }
+
+        public bool UpdateLocation(int locationId, LocationDto locationDto)
+        {
+            var locationMapped = _mapper.Map<Location>(locationDto);
+            locationMapped.Id = locationId;
+
+            return _locationRepository.UpdateLocation(locationMapped);
+        }
     }
 }

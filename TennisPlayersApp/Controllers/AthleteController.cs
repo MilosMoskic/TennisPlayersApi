@@ -154,5 +154,20 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Successfully added Athlete to a Tournament.");
         }
+
+        [HttpPut("UpdateAthlete")]
+        public IActionResult UpdateAthlete(int athleteId, [FromBody] AthleteDto athleteDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_athleteService.AthleteExists(athleteId))
+                return NotFound("Athlete does not exist.");
+
+            if (!_athleteService.UpdateAthlete(athleteId, athleteDto))
+                return BadRequest("Error while saving.");
+
+            return StatusCode(200, "Successfully updated.");
+        }
     }
 }

@@ -48,5 +48,11 @@ namespace TennisPlayers.Infastructure.Repositories
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public bool UpdateLocation(Location location)
+        {
+            _context.Update(location);
+            return Save();
+        }
     }
 }

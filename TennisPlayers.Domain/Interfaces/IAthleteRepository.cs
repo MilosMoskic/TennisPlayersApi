@@ -15,6 +15,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool AthleteExists(string name);
         bool AddAthlete(Coach coach, Country country, Athlete athlete);
         bool AddAthleteToTournament(Athlete athlete, Tournament tournament);
+        bool UpdateAthlete(Athlete athlete);
         bool Save();
     }
 }
