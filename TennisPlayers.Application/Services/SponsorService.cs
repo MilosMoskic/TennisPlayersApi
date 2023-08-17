@@ -8,11 +8,15 @@ namespace TennisPlayers.Application.Services
 {
     public class SponsorService : ISponsorService
     {
-        public readonly ISponsorRepository _sponsorRepository;
-        public readonly IMapper _mapper;
-        public SponsorService(ISponsorRepository sponsorRepository, IMapper mapper)
+        private readonly ISponsorRepository _sponsorRepository;
+        private readonly IAthleteRepository _athleteRepository;
+        private readonly IMapper _mapper;
+        public SponsorService(ISponsorRepository sponsorRepository,
+            IAthleteRepository athleteRepository,
+            IMapper mapper)
         {
             _sponsorRepository = sponsorRepository;
+            _athleteRepository = athleteRepository;
             _mapper = mapper;
         }
 
@@ -20,6 +24,14 @@ namespace TennisPlayers.Application.Services
         {
             var sponsorMapped = _mapper.Map<Sponsor>(sponsorDto);
             return _sponsorRepository.AddSponsor(sponsorMapped);
+        }
+
+        public bool AddSponsorToAthlete(int athleteId, int sponsorId)
+        {
+            var athlete = _athleteRepository.GetAthlete(athleteId);
+            var sponsor = _sponsorRepository.GetSponsor(sponsorId);
+
+            return _sponsorRepository.AddSponsorToAthlete(athlete, sponsor);
         }
 
         public async Task<List<SponsorDto>> GetAllSponsors()

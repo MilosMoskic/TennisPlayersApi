@@ -19,6 +19,18 @@ namespace TennisPlayers.Infastructure.Repositories
             return Save();
         }
 
+        public bool AddSponsorToAthlete(Athlete athlete, Sponsor sponsor)
+        {
+            var athleteSponsors = new AthleteSponsor()
+            {
+                Athlete = athlete,
+                Sponsor = sponsor,
+            };
+
+            _context.AthleteSponsors.Add(athleteSponsors);
+            return Save();
+        }
+
         public Task<List<Sponsor>> GetAllSponsorsByNW(decimal netWorth)
         {
             return _context.Sponsors.Where(s => s.NetWorth >= netWorth).ToListAsync();
