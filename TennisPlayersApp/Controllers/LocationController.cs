@@ -47,7 +47,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(location);
         }
 
-        [HttpPost]
+        [HttpPost("AddLocation")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddLocation([FromBody] LocationDto locationDto)
@@ -64,7 +64,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Location added successfully.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateLocation")]
         public IActionResult UpdateLocation(int locationId, [FromBody] LocationDto locationDto)
         {
             if (!ModelState.IsValid)

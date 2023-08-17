@@ -155,7 +155,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Successfully added Athlete to a Tournament.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateAthlete")]
         public IActionResult UpdateAthlete(int athleteId, [FromBody] AthleteDto athleteDto)
         {
             if (!ModelState.IsValid)

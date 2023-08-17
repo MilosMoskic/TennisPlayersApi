@@ -49,7 +49,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(tournament);
         }
 
-        [HttpPost]
+        [HttpPost("AddTournament")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
@@ -69,7 +69,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Tournament added successfully.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateTournament")]
         public IActionResult UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
         {
             if (!ModelState.IsValid)

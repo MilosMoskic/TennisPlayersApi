@@ -98,7 +98,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Successfully added Sponsor to Athlete.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateSponsor")]
         public IActionResult UpdateSponsor(int sponsorId, [FromBody] SponsorDto sponsorDto)
         {
             if (!ModelState.IsValid)

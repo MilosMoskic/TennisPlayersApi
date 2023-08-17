@@ -48,7 +48,7 @@ namespace iTennisPlayersApi.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("AddCountry")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddCountry([FromBody] CountryDto countryDto)
@@ -65,7 +65,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Country added successfully.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateCountry")]
         public IActionResult UpdateCountry(int countryId, [FromBody] CountryDto countryDto)
         {
             if (!ModelState.IsValid)

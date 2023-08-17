@@ -48,7 +48,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok(coach);
         }
 
-        [HttpPost]
+        [HttpPost("AddCoach")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult AddCoach([FromBody] CoachDto coachDto)
@@ -65,7 +65,7 @@ namespace iTennisPlayersApi.Controllers
             return Ok("Coach added successfully.");
         }
 
-        [HttpPut]
+        [HttpPut("UpdateCoach")]
         public IActionResult UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
         {
             if (!ModelState.IsValid)
