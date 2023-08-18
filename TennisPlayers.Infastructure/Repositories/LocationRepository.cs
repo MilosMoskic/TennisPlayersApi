@@ -14,7 +14,7 @@ namespace TennisPlayers.Infastructure.Repositories
         }
         public Location GetLocation(int id)
         {
-            return _context.Locations.Where(l => l.Id == id).FirstOrDefault();
+            return _context.Locations.Where(l => l.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Location GetLocation(string name)
@@ -52,6 +52,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public bool UpdateLocation(Location location)
         {
             _context.Update(location);
+            return Save();
+        }
+
+        public bool DeleteLocation(Location location)
+        {
+            _context.Remove(location);
             return Save();
         }
     }

@@ -22,6 +22,12 @@ namespace TennisPlayers.Application.Services
             return _locationRepository.AddLocation(locationMapped);
         }
 
+        public bool DeleteLocation(LocationDto locationDto)
+        {
+            var location = _mapper.Map<Location>(locationDto);
+            return _locationRepository.DeleteLocation(location);
+        }
+
         public async Task<List<LocationDto>> GetAllLocations()
         {
             var locations = await _locationRepository.GetAllLocations();
