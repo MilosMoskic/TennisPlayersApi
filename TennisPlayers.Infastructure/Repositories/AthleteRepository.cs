@@ -97,5 +97,15 @@ namespace TennisPlayers.Infastructure.Repositories
             _context.Remove(athlete);
             return Save();
         }
+
+        public bool RemoveAthleteFromTournament(int athleteId, int tournamentId)
+        {
+            var athleteTournament = _context.AthleteTournaments
+                .Where(a => a.AthleteId == athleteId)
+                .Where(t => t.TournamentId == tournamentId).FirstOrDefault();
+
+            _context.AthleteTournaments.Remove(athleteTournament);
+            return Save();
+        }
     }
 }
