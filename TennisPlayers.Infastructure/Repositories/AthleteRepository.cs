@@ -15,7 +15,7 @@ namespace TennisPlayers.Infastructure.Repositories
         }
         public Athlete GetAthlete(int id)
         {
-            return _context.Athletes.Where(a => a.Id == id).FirstOrDefault();
+            return _context.Athletes.Where(a => a.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Athlete GetAthlete(string lastName)
@@ -89,6 +89,12 @@ namespace TennisPlayers.Infastructure.Repositories
         public bool UpdateAthlete(Athlete athlete)
         {
             _context.Update(athlete);
+            return Save();
+        }
+
+        public bool DeleteAthlete(Athlete athlete)
+        {
+            _context.Remove(athlete);
             return Save();
         }
     }

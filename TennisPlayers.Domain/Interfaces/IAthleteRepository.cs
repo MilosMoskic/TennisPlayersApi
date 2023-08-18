@@ -16,6 +16,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool AddAthlete(Coach coach, Country country, Athlete athlete);
         bool AddAthleteToTournament(Athlete athlete, Tournament tournament);
         bool UpdateAthlete(Athlete athlete);
+        bool DeleteAthlete(Athlete athlete);
         bool Save();
     }
 }

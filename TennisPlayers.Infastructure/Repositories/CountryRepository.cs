@@ -30,6 +30,12 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Countries.Any(c => c.Name == country);
         }
 
+        public bool DeleteCountry(Country country)
+        {
+            _context.Remove(country);
+            return Save();
+        }
+
         public Task<List<Country>> GetCountries()
         {
             return _context.Countries.ToListAsync();
@@ -37,7 +43,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Country GetCountry(int id)
         {
-            return _context.Countries.Where(c => c.Id == id).FirstOrDefault();
+            return _context.Countries.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Country GetCountry(string name)

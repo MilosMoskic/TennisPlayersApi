@@ -78,5 +78,22 @@ namespace iTennisPlayersApi.Controllers
 
             return StatusCode(200, "Successfully updated.");
         }
+
+        [HttpDelete("DeleteLocation")]
+        public async Task<IActionResult> DeleteLocation(int locationId)
+        {
+            if (!_locationService.LocationExists(locationId))
+                return NotFound("Location not found.");
+
+            var locationToDelete = _locationService.GetLocationById(locationId);
+
+            if (!_locationService.DeleteLocation(locationToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Location deleted successfully.");
+        }
     }
 }

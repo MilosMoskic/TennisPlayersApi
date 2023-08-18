@@ -26,6 +26,12 @@ namespace TennisPlayers.Application.Services
             return _tournamentRepository.AddTournament(location, tournamentMapped);
         }
 
+        public bool DeleteTournament(TournamentDto tournamentDto)
+        {
+            var tournmanet = _mapper.Map<Tournament>(tournamentDto);
+            return _tournamentRepository.DeleteTournament(tournmanet);
+        }
+
         public async Task<List<TournamentDto>> GetAllTournaments()
         {
             var tournaments = await _tournamentRepository.GetTournaments();

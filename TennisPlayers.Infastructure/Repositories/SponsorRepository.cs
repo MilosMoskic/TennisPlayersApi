@@ -31,6 +31,12 @@ namespace TennisPlayers.Infastructure.Repositories
             return Save();
         }
 
+        public bool DeleteSponsor(Sponsor sponsor)
+        {
+            _context.Remove(sponsor);
+            return Save();
+        }
+
         public Task<List<Sponsor>> GetAllSponsorsByNW(decimal netWorth)
         {
             return _context.Sponsors.Where(s => s.NetWorth >= netWorth).ToListAsync();
@@ -38,7 +44,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Sponsor GetSponsor(int id)
         {
-            return _context.Sponsors.Where(s => s.Id == id).FirstOrDefault();
+            return _context.Sponsors.Where(s => s.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Sponsor GetSponsor(string name)
