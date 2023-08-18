@@ -115,5 +115,15 @@ namespace TennisPlayers.Application.Services
 
             return _athleteRepository.UpdateAthlete(athleteMapped);
         }
+
+        public bool RemoveAthleteFromTournament(int athleteId, int tournamentId)
+        {
+            return _athleteRepository.RemoveAthleteFromTournament(athleteId, tournamentId);
+        }
+
+        public bool RemoveAthleteFromSponsor(int athleteId, int sponsorId)
+        {
+            return _athleteRepository.RemoveAthleteFromSponsor(athleteId, sponsorId);
+        }
     }
 }

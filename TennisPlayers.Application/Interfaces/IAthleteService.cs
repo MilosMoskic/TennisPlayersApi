@@ -16,6 +16,8 @@ namespace TennisPlayers.Application.Interfaces
         public bool AddAthlete(int coachId, int countryId, AthleteDto athlete);
         public bool AddAthleteToTournament(int athleteId, int tournamentId);
         public bool UpdateAthlete(int athleteId, AthleteDto athleteDto);
+        public bool RemoveAthleteFromTournament(int athleteId, int tournamentId);
+        public bool RemoveAthleteFromSponsor(int athleteId, int sponsorId);
         public bool DeleteAthlete(AthleteDto athleteDto);
     }
 }
