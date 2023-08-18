@@ -11,6 +11,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool TournamentExists(string name);
         bool AddTournament(Location location, Tournament tournament);
         bool UpdateTournament(Tournament tournament);
+        bool DeleteTournament(Tournament tournament);
         bool Save();
     }
 }

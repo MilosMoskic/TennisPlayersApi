@@ -83,5 +83,22 @@ namespace iTennisPlayersApi.Controllers
 
             return StatusCode(200, "Successfully updated.");
         }
+
+        [HttpDelete("DeleteTournament")]
+        public async Task<IActionResult> DeleteTournament(int tournamentId)
+        {
+            if (!_tournamentService.TournamentExists(tournamentId))
+                return NotFound("Tournament not found.");
+
+            var tournamentToDelete = _tournamentService.GetTournamentById(tournamentId);
+
+            if (!_tournamentService.DeleteTournament(tournamentToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Tournament deleted successfully.");
+        }
     }
 }

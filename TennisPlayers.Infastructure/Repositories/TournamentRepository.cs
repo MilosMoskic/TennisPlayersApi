@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Models;
 using TennisPlayers.Infastructure.Context;
@@ -22,9 +21,15 @@ namespace TennisPlayers.Infastructure.Repositories
             return Save();
         }
 
+        public bool DeleteTournament(Tournament tournament)
+        {
+            _context.Remove(tournament);
+            return Save();
+        }
+
         public Tournament GetTournament(int id)
         {
-            return _context.Tournaments.Where(t => t.Id == id).FirstOrDefault();
+            return _context.Tournaments.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Tournament GetTournament(string name)
