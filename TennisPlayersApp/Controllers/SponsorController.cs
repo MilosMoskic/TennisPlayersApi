@@ -112,5 +112,22 @@ namespace iTennisPlayersApi.Controllers
 
             return StatusCode(200, "Successfully updated.");
         }
+
+        [HttpDelete("DeleteSponsor")]
+        public async Task<IActionResult> DeleteSponsor(int sponsorId)
+        {
+            if (!_sponsorService.SponsorExists(sponsorId))
+                return NotFound("Sponsor not found.");
+
+            var sponsorToDelete = _sponsorService.GetSponsorById(sponsorId);
+
+            if (!_sponsorService.DeleteSponsor(sponsorToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Sponsor deleted successfully.");
+        }
     }
 }

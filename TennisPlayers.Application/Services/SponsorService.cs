@@ -34,6 +34,12 @@ namespace TennisPlayers.Application.Services
             return _sponsorRepository.AddSponsorToAthlete(athlete, sponsor);
         }
 
+        public bool DeleteSponsor(SponsorDto sponsorDto)
+        {
+            var sponsor = _mapper.Map<Sponsor>(sponsorDto);
+            return _sponsorRepository.DeleteSponsor(sponsor);
+        }
+
         public async Task<List<SponsorDto>> GetAllSponsors()
         {
             var sponsors = await _sponsorRepository.GetSponsors();
