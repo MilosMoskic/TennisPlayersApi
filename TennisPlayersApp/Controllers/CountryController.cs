@@ -79,5 +79,22 @@ namespace iTennisPlayersApi.Controllers
 
             return StatusCode(200, "Successfully updated.");
         }
+
+        [HttpDelete("DeleteCountry")]
+        public async Task<IActionResult> DeleteCountry(int countryId)
+        {
+            if (!_countryService.CountryExists(countryId))
+                return NotFound("Country not found.");
+
+            var countryToDelete = _countryService.GetCountryById(countryId);
+
+            if (!_countryService.DeleteCountry(countryToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Country deleted successfully.");
+        }
     }
 }

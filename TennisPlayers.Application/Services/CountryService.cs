@@ -32,6 +32,12 @@ namespace TennisPlayers.Application.Services
             return _countryRepository.CountryExists(country);
         }
 
+        public bool DeleteCountry(CountryDto countryDto)
+        {
+            var country = _mapper.Map<Country>(countryDto);
+            return _countryRepository.DeleteCountry(country);
+        }
+
         public async Task<List<CountryDto>> GetAllCountries()
         {
             var countries = await _countryRepository.GetCountries();
