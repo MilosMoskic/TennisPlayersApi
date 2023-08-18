@@ -204,5 +204,23 @@ namespace iTennisPlayersApi.Controllers
 
             return Ok("Athlete removed successfully.");
         }
+
+        [HttpDelete("RemoveAthleteFromSponsor")]
+        public async Task<IActionResult> RemoveAthleteFromSponsor(int athleteId, int sponsorId)
+        {
+            if (!_athleteService.AthleteExists(athleteId))
+                return NotFound("Athlete not found.");
+
+            if (!_sponsorService.SponsorExists(sponsorId))
+                return NotFound("Sponsor not found.");
+
+            if (!_athleteService.RemoveAthleteFromSponsor(athleteId, sponsorId))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Athlete removed successfully.");
+        }
     }
 }

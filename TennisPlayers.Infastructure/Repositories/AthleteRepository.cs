@@ -107,5 +107,15 @@ namespace TennisPlayers.Infastructure.Repositories
             _context.AthleteTournaments.Remove(athleteTournament);
             return Save();
         }
+
+        public bool RemoveAthleteFromSponsor(int athleteId, int sponsorId)
+        {
+            var athleteTournament = _context.AthleteSponsors
+                .Where(a => a.AthleteId == athleteId)
+                .Where(t => t.SponsorId == sponsorId).FirstOrDefault();
+
+            _context.AthleteSponsors.Remove(athleteTournament);
+            return Save();
+        }
     }
 }
