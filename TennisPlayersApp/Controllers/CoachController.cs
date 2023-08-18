@@ -79,5 +79,22 @@ namespace iTennisPlayersApi.Controllers
 
             return StatusCode(200, "Successfully updated.");
         }
+
+        [HttpDelete("DeleteCoach")]
+        public async Task<IActionResult> DeleteCoach(int coachId)
+        {
+            if (!_coachService.CoachExists(coachId))
+                return NotFound("Coach not found.");
+
+            var coachToDelete = _coachService.GetCoachById(coachId);
+
+            if (!_coachService.DeleteCoach(coachToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving.");
+                return BadRequest(ModelState);
+            }
+
+            return Ok("Coach deleted successfully.");
+        }
     }
 }

@@ -59,5 +59,11 @@ namespace TennisPlayers.Application.Services
 
             return _coachRepository.UpdateCoach(coachMapped);
         }
+
+        public bool DeleteCoach(CoachDto coachDto)
+        {
+            var coach = _mapper.Map<Coach>(coachDto);
+            return _coachRepository.DeleteCoach(coach);
+        }
     }
 }

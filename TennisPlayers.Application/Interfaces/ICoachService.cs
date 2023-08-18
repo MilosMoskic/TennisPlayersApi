@@ -1,4 +1,5 @@
 ﻿using TennisPlayers.Application.Dto;
+using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Interfaces
 {
@@ -11,5 +12,6 @@ namespace TennisPlayers.Application.Interfaces
         public bool CoachExists(string lastName);
         public bool AddCoach(CoachDto coachDto);
         public bool UpdateCoach(int coachId, CoachDto coachDto);
+        public bool DeleteCoach(CoachDto coachDto);
     }
 }

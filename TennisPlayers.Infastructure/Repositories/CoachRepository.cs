@@ -30,6 +30,12 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Coaches.Any(c => c.LastName== lastName);
         }
 
+        public bool DeleteCoach(Coach coach)
+        {
+            _context.Remove(coach);
+            return Save();
+        }
+
         public Task<List<Coach>> GetAllCoaches()
         {
             return _context.Coaches.ToListAsync();
@@ -37,7 +43,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Coach GetCoach(int id)
         {
-            return _context.Coaches.Where(c => c.Id == id).FirstOrDefault();
+            return _context.Coaches.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public List<Coach> GetCoach(string lastName)

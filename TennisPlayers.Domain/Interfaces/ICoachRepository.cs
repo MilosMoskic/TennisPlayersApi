@@ -11,6 +11,7 @@ namespace TennisPlayers.Domain.Interfaces
         bool CoachExists(string lastName);
         bool AddCoach(Coach coach);
         bool UpdateCoach(Coach coach);
+        bool DeleteCoach(Coach coach);
         bool Save();
     }
 }
