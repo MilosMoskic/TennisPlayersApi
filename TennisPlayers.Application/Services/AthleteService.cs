@@ -54,6 +54,12 @@ namespace TennisPlayers.Application.Services
             return _athleteRepository.AthleteExists(name);
         }
 
+        public bool DeleteAthlete(AthleteDto athleteDto)
+        {
+            var athlete = _mapper.Map<Athlete>(athleteDto);
+            return _athleteRepository.DeleteAthlete(athlete);
+        }
+
         public async Task<List<AthleteDto>> GetAllAthletes()
         {
             var athletes = await _athleteRepository.GetAllAthletes();
