@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
+using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -51,8 +53,10 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddCoach")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddCoach([FromBody] CoachDto coachDto)
+        public  IActionResult AddCoach([FromBody] CoachDto coachDto)
         {
+            var validator = new CoachValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -60,6 +64,13 @@ namespace iTennisPlayersApi.Controllers
             {
                 ModelState.AddModelError("", "Error adding new coach.");
                 return BadRequest(ModelState);
+            }
+
+            var validationResult = validator.Validate(coachDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
             }
 
             return Ok("Coach added successfully.");
