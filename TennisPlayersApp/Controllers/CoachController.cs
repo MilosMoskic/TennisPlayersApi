@@ -53,7 +53,7 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddCoach")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public  IActionResult AddCoach([FromBody] CoachDto coachDto)
+        public IActionResult AddCoach([FromBody] CoachDto coachDto)
         {
             var validator = new CoachValidator();
 
