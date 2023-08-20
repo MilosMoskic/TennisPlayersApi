@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Validators;
 using TennisPlayers.Infastructure.Context;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 
 builder.Services.AddScoped<IValidator<CoachDto>, CoachValidator>();
+builder.Services.AddScoped<IValidator<CountryDto>, CountryValidator>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
