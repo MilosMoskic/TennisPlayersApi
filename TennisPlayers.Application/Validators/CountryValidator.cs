@@ -14,7 +14,7 @@ namespace TennisPlayers.Application.Validators
                 .NotEmpty()
                 .WithMessage("Country Name cannot be empty.")
                 .Matches(new Regex(@"[A-Za-z]"))
-                .WithMessage("Abbreviation should contain only letters.");
+                .WithMessage("Country should contain only letters.");
             RuleFor(c => c.Abbreviation)
                 .NotNull()
                 .WithMessage("Abbreviation cannot be null.")

@@ -2,6 +2,7 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
@@ -54,17 +55,26 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
         {
+            //var validator = new TournamentValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (!_locationService.LocationExists(locationId))
-                return NotFound("Tournament does not exist");
+                return NotFound("Location does not exist");
 
             if (!_tournamentService.AddTournament(locationId, tournamentDto))
             {
                 ModelState.AddModelError("", "Error adding new tournament.");
                 return BadRequest(ModelState);
             }
+
+            //var validationResult = validator.Validate(tournamentDto);
+
+            //if (!validationResult.IsValid)
+            //{
+            //    return BadRequest(validationResult);
+            //}
 
             return Ok("Tournament added successfully.");
         }
