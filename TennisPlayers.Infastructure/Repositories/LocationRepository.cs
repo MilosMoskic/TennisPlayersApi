@@ -14,7 +14,7 @@ namespace TennisPlayers.Infastructure.Repositories
         }
         public Location GetLocation(int id)
         {
-            return _context.Locations.Where(l => l.Id == id).AsNoTracking().FirstOrDefault();
+            return _context.Locations.Where(l => l.Id == id).FirstOrDefault();
         }
 
         public Location GetLocation(string name)

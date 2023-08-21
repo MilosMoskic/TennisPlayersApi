@@ -43,7 +43,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Country GetCountry(int id)
         {
-            return _context.Countries.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
+            return _context.Countries.Where(c => c.Id == id).FirstOrDefault();
         }
 
         public Country GetCountry(string name)
