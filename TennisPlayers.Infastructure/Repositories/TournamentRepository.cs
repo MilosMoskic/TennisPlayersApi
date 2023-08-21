@@ -24,7 +24,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Tournament GetTournament(int id)
         {
-            return _context.Tournaments.Where(t => t.Id == id).FirstOrDefault();
+            return _context.Tournaments.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Tournament GetTournament(string name)
