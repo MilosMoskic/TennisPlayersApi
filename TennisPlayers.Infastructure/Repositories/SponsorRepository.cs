@@ -44,7 +44,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Sponsor GetSponsor(int id)
         {
-            return _context.Sponsors.Where(s => s.Id == id).AsNoTracking().FirstOrDefault();
+            return _context.Sponsors.Where(s => s.Id == id).FirstOrDefault();
         }
 
         public Sponsor GetSponsor(string name)

@@ -2,7 +2,9 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
+using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -63,6 +65,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddSponsor([FromBody] SponsorDto sponsorDto)
         {
+            var validator = new SponsorValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -70,6 +74,13 @@ namespace iTennisPlayersApi.Controllers
             {
                 ModelState.AddModelError("", "Error adding new sponsor.");
                 return BadRequest(ModelState);
+            }
+
+            var validationResult = validator.Validate(sponsorDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
             }
 
             return Ok("Sponsor added successfully.");

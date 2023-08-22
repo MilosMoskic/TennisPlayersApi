@@ -12,8 +12,8 @@ using TennisPlayers.Infastructure.Context;
 namespace TennisPlayers.Infastructure.Migrations
 {
     [DbContext(typeof(TennisPlayersContext))]
-    [Migration("20230813163917_Changed int to decimal on NetWorth")]
-    partial class ChangedinttodecimalonNetWorth
+    [Migration("20230821143502_Initial Create")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace TennisPlayers.Infastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Ranking")
+                    b.Property<int?>("Ranking")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")

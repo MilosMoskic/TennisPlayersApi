@@ -12,8 +12,8 @@ using TennisPlayers.Infastructure.Context;
 namespace TennisPlayers.Infastructure.Migrations
 {
     [DbContext(typeof(TennisPlayersContext))]
-    [Migration("20230814194802_set Ranking to null")]
-    partial class setRankingtonull
+    [Migration("20230822072502_Changed Datetime to string in Tournament.cs")]
+    partial class ChangedDatetimetostringinTournamentcs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,8 +189,9 @@ namespace TennisPlayers.Infastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("EndDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -199,8 +200,9 @@ namespace TennisPlayers.Infastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SurfaceType")
                         .IsRequired()

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Interfaces;
 using TennisPlayers.Domain.Models;
 
@@ -114,6 +116,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddAthelete([FromQuery] int countryId, [FromQuery] int coachId, [FromBody] AthleteDto athleteDto)
         {
+            var validator = new AthleteValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -122,6 +126,13 @@ namespace iTennisPlayersApi.Controllers
 
             if (!_coachService.CoachExists(coachId))
                 return NotFound("Coach does not exist");
+
+            var validationResult = validator.Validate(athleteDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
+            }
 
             if (!_athleteService.AddAthlete(coachId, countryId, athleteDto))
             {

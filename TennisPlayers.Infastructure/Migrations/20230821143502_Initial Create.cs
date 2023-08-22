@@ -59,7 +59,7 @@ namespace TennisPlayers.Infastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NetWorth = table.Column<int>(type: "int", nullable: false)
+                    NetWorth = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,7 +75,7 @@ namespace TennisPlayers.Infastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
-                    Ranking = table.Column<int>(type: "int", nullable: false),
+                    Ranking = table.Column<int>(type: "int", nullable: true),
                     TotalWins = table.Column<int>(type: "int", nullable: false),
                     TotalLoses = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),

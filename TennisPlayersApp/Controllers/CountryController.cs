@@ -2,7 +2,9 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
+using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -53,6 +55,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddCountry([FromBody] CountryDto countryDto)
         {
+            var validator = new CountryValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -60,6 +64,13 @@ namespace iTennisPlayersApi.Controllers
             {
                 ModelState.AddModelError("", "Error adding new country.");
                 return BadRequest(ModelState);
+            }
+
+            var validationResult = validator.Validate(countryDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
             }
 
             return Ok("Country added successfully.");

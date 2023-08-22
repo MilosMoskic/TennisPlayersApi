@@ -43,7 +43,7 @@ namespace TennisPlayers.Infastructure.Repositories
 
         public Coach GetCoach(int id)
         {
-            return _context.Coaches.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
+            return _context.Coaches.Where(c => c.Id == id).FirstOrDefault();
         }
 
         public List<Coach> GetCoach(string lastName)

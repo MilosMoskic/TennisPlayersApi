@@ -2,7 +2,9 @@
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
+using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -52,6 +54,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddLocation([FromBody] LocationDto locationDto)
         {
+            var validator = new LocationValidator();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -59,6 +63,13 @@ namespace iTennisPlayersApi.Controllers
             {
                 ModelState.AddModelError("", "Error adding new location.");
                 return BadRequest(ModelState);
+            }
+
+            var validationResult = validator.Validate(locationDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
             }
 
             return Ok("Location added successfully.");

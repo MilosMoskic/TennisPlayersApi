@@ -186,8 +186,9 @@ namespace TennisPlayers.Infastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("EndDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -196,8 +197,9 @@ namespace TennisPlayers.Infastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SurfaceType")
                         .IsRequired()
