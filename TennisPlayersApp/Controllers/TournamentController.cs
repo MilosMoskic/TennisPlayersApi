@@ -55,7 +55,7 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
         {
-            //var validator = new TournamentValidator();
+            var validator = new TournamentValidator();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -69,12 +69,12 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var validationResult = validator.Validate(tournamentDto);
+            var validationResult = validator.Validate(tournamentDto);
 
-            //if (!validationResult.IsValid)
-            //{
-            //    return BadRequest(validationResult);
-            //}
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult);
+            }
 
             return Ok("Tournament added successfully.");
         }
