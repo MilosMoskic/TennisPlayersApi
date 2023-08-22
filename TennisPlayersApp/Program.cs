@@ -33,6 +33,7 @@ builder.Services.AddScoped<IValidator<CountryDto>, CountryValidator>();
 builder.Services.AddScoped<IValidator<LocationDto>, LocationValidator>();
 builder.Services.AddScoped<IValidator<SponsorDto>, SponsorValidator>();
 builder.Services.AddScoped<IValidator<TournamentDto>, TournamentValidator>();
+builder.Services.AddScoped<IValidator<AthleteDto>, AthleteValidator>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
