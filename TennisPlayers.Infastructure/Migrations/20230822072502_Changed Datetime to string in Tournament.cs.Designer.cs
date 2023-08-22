@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TennisPlayers.Infastructure.Context;
 
@@ -11,9 +12,11 @@ using TennisPlayers.Infastructure.Context;
 namespace TennisPlayers.Infastructure.Migrations
 {
     [DbContext(typeof(TennisPlayersContext))]
-    partial class TennisPlayersContextModelSnapshot : ModelSnapshot
+    [Migration("20230822072502_Changed Datetime to string in Tournament.cs")]
+    partial class ChangedDatetimetostringinTournamentcs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
