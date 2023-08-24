@@ -22,6 +22,7 @@
     <Folder Include="Mediator\Commands\CoachCommands\" />
     <Folder Include="Mediator\Commands\LocationCommands\" />
     <Folder Include="Mediator\Commands\CountryCommands\" />
+    <Folder Include="Mediator\Commands\AthleteCommands\" />
     <Folder Include="Mediator\Commands\TournamentCommands\" />
     <Folder Include="Mediator\Commands\SponsorCommands\" />
   </ItemGroup>

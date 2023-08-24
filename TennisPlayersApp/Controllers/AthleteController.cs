@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Querries.AthleteQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Interfaces;
@@ -13,18 +15,21 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class AthleteController : Controller
     {
+        private readonly IMediator _mediator;
         private readonly IAthleteService _athleteService;
         private readonly ITournamentService _tournamentService;
         private readonly ISponsorService _sponsorService;
         private readonly ICoachService _coachService;
         private readonly ICountryService _countryService;
 
-        public AthleteController(IAthleteService athleteService,
+        public AthleteController(IMediator mediator,
+            IAthleteService athleteService,
             ITournamentService tournamentService,
             ICoachService coachService,
             ICountryService countryService,
             ISponsorService sponsorService)
         {
+            _mediator = mediator;
             _athleteService = athleteService;
             _tournamentService = tournamentService;
             _coachService = coachService;
@@ -35,8 +40,8 @@ namespace iTennisPlayersApi.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllAthletes()
         {
-            var result = await _athleteService.GetAllAthletes();
-            return Ok(result);
+            var result = await _mediator.Send(new GetAllAthletesQuerry());
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{athleteId}")]
@@ -44,11 +49,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAthleteById(int athleteId)
         {
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete does not exist");
-
-            var athlete = _athleteService.GetAthleteById(athleteId);
-            return Ok(athlete);
+            var result = await _mediator.Send(new GetAthleteByIdQuerry(athleteId));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -56,11 +58,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAthleteByLastName(string lastName)
         {
-            if (!_athleteService.AthleteExists(lastName))
-                return NotFound("Athlete does not exist");
-
-            var athlete = _athleteService.GetAthleteByName(lastName);
-            return Ok(athlete);
+            var result = await _mediator.Send(new GetAthleteByNameQuerry(lastName));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{ranking}")]
@@ -68,11 +67,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAthleteByRanking(int ranking)
         {
-            if (!_athleteService.AthleteExists(ranking))
-                return NotFound("Athlete does not exist");
-
-            var athlete = _athleteService.GetAthleteByRanking(ranking);
-            return Ok(athlete);
+            var result = await _mediator.Send(new GetAthleteByRankingQuerry(ranking));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{tournamentId}")]
@@ -80,11 +76,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAthleteByTournament(int tournamentId)
         {
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist");
-
-            var athlete = _athleteService.GetAthletesByTournament(tournamentId);
-            return Ok(athlete);
+            var result = await _mediator.Send(new GetAthletesByTournamentQuerry(tournamentId));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{sponsorId}")]
@@ -92,11 +85,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAthleteBySponsor(int sponsorId)
         {
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor does not exist");
-
-            var athlete = _athleteService.GetAthletesBySponsor(sponsorId);
-            return Ok(athlete);
+            var result = await _mediator.Send(new GetAthletesBySponsorQuerry(sponsorId));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -104,11 +94,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetAthletesWinPercent(string lastName)
         {
-            if (!_athleteService.AthleteExists(lastName))
-                return NotFound("Athlete does not exist");
-
-            var athlete = _athleteService.GetAthleteWinPercent(lastName);
-            return Ok(athlete);
+            var result = _mediator.Send(new GetAthleteWinPercentQuerry(lastName));
+            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
         [HttpPost("AddAthelete")]
