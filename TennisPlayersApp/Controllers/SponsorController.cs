@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Handlers.CoachHandlers;
+using TennisPlayers.Application.Mediator.Handlers.SponsorHandlers;
+using TennisPlayers.Application.Mediator.Querries.SponsorQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
@@ -12,10 +16,12 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class SponsorController : Controller
     {
+        private readonly IMediator _mediator;
         public readonly ISponsorService _sponsorService;
         public readonly IAthleteService _athleteService;
-        public SponsorController(ISponsorService sponsorService, IAthleteService athleteService)
+        public SponsorController(IMediator mediator, ISponsorService sponsorService, IAthleteService athleteService)
         {
+            _mediator = mediator;
             _sponsorService = sponsorService;
             _athleteService = athleteService;
         }
@@ -23,7 +29,7 @@ namespace iTennisPlayersApi.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllSponsors()
         {
-            var result = await _sponsorService.GetAllSponsors();
+            var result = await _mediator.Send(new GetAllSponsorsQuerry());
             return Ok(result);
         }
 
@@ -32,11 +38,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorById(int sponsorId)
         {
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor does not exist");
-
-            var sponsor = _sponsorService.GetSponsorById(sponsorId);
-            return Ok(sponsor);
+            var result = await _mediator.Send(new GetSponsorByIdQuerry(sponsorId));
+            return result != null ? Ok(result) : NotFound("Sponsor does not exist.");
         }
 
         [HttpGet("[action]/{sponsorName}")]
@@ -44,11 +47,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorByName(string sponsorName)
         {
-            if (!_sponsorService.SponsorExists(sponsorName))
-                return NotFound("Sponsor does not exist");
-
-            var sponsor = _sponsorService.GetSponsorByName(sponsorName);
-            return Ok(sponsor);
+            var result = await _mediator.Send(new GetSponsorByNameQuerry(sponsorName));
+            return result != null ? Ok(result) : NotFound("Sponsor does not exist.");
         }
 
         [HttpGet("[action]/{netWorth}")]
