@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Mediator\Commands\CoachCommands\" />
     <Folder Include="Mediator\Commands\LocationCommands\" />
+    <Folder Include="Mediator\Commands\CountryCommands\" />
     <Folder Include="Mediator\Commands\SponsorCommands\" />
   </ItemGroup>
 

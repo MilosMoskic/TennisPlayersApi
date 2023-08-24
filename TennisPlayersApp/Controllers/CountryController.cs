@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Querries.CountryQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
@@ -12,16 +14,18 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class CountryController : Controller
     {
+        public readonly IMediator _mediator;
         public readonly ICountryService _countryService;
-        public CountryController(ICountryService countryService)
+        public CountryController(IMediator mediator, ICountryService countryService)
         {
+            _mediator = mediator;
             _countryService = countryService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCountries()
         {
-            var result = await _countryService.GetAllCountries();
+            var result = await _mediator.Send(new GetAllCountriesQuerry());
             return Ok(result);
         }
 
@@ -30,11 +34,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryById(int countryId)
         {
-            if (!_countryService.CountryExists(countryId))
-                return NotFound("Country does not exist");
-
-            var country = _countryService.GetCountryById(countryId);
-            return Ok(country);
+            var result = await _mediator.Send(new GetCountryByIdQuerry(countryId));
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpGet("[action]/{countryName}")]
@@ -42,11 +43,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCountryByCountryName(string countryName)
         {
-            if (!_countryService.CountryExists(countryName))
-                return NotFound("Country does not exist");
-
-            var country = _countryService.GetCountryByName(countryName);
-            return Ok(country);
+            var result = await _mediator.Send(new GetCountryByNameQuerry(countryName));
+            return result != null ? Ok(result) : NotFound();
         }
 
 
