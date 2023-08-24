@@ -1,7 +1,9 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Handlers.CoachHandlers;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Interfaces;
@@ -34,6 +36,7 @@ builder.Services.AddScoped<IValidator<LocationDto>, LocationValidator>();
 builder.Services.AddScoped<IValidator<SponsorDto>, SponsorValidator>();
 builder.Services.AddScoped<IValidator<TournamentDto>, TournamentValidator>();
 builder.Services.AddScoped<IValidator<AthleteDto>, AthleteValidator>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(GetAllCoachesHandler)));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

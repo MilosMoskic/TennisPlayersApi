@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mediator\Commands\" />
-    <Folder Include="Mediator\Handlers\" />
-    <Folder Include="Mediator\Querries\" />
+    <Folder Include="Mediator\Commands\CoachCommands\" />
   </ItemGroup>
 
 </Project>

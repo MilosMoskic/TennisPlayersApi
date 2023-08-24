@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Querries.CoachQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
 using TennisPlayers.Domain.Validators;
@@ -13,16 +16,18 @@ namespace iTennisPlayersApi.Controllers
     public class CoachController : Controller
     {
         private readonly ICoachService _coachService;
+        private readonly IMediator _mediator;
 
-        public CoachController(ICoachService coachService)
+        public CoachController(IMediator mediator, ICoachService coachService)
         {
+            _mediator = mediator;
             _coachService = coachService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCoaches()
         {
-            var result = await _coachService.GetAllCoaches();
+            var result = await _mediator.Send(new GetAllCoachesQuerry());
             return Ok(result);
         }
 
@@ -31,11 +36,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachById(int coachId)
         {
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach does not exist");
-
-            var coach = _coachService.GetCoachById(coachId);
-            return Ok(coach);
+            var result = _mediator.Send(new GetCoachByIdQuerry(coachId));
+            return result != null ? Ok(result) : NotFound("Coach does not exist.");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -43,11 +45,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachByLastName(string lastName)
         {
-            if (!_coachService.CoachExists(lastName))
-                return NotFound("Coach does not exist");
-
-            var coach = await _coachService.GetCoachesByLastName(lastName);
-            return Ok(coach);
+            var result = await _mediator.Send(new GetCoachesByLastNameQuerry(lastName));
+            return result != null ? Ok(result) : NotFound("Coach does not exist.");
         }
 
         [HttpPost("AddCoach")]
