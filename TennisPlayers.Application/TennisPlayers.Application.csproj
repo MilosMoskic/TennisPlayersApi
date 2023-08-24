@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Mediator\Commands\CoachCommands\" />
+    <Folder Include="Mediator\Commands\LocationCommands\" />
   </ItemGroup>
 
 </Project>

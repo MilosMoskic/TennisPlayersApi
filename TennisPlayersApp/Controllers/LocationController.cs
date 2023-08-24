@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Mediator.Querries.LocationQuerries;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
-using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -13,15 +13,17 @@ namespace iTennisPlayersApi.Controllers
     public class LocationController : Controller
     {
         private readonly ILocationService _locationService;
-        public LocationController(ILocationService locationService)
+        private readonly IMediator _mediator;
+        public LocationController(IMediator mediator, ILocationService locationService)
         {
+            _mediator = mediator;
             _locationService = locationService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllLocations()
         {
-            var result = await _locationService.GetAllLocations();
+            var result = await _mediator.Send(new GetAllLocationsQuerry());
             return Ok(result);
         }
 
@@ -30,11 +32,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetLocationById(int locationId)
         {
-            if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist");
-
-            var location = _locationService.GetLocationById(locationId);
-            return Ok(location);
+            var result = await _mediator.Send(new GetLocationByIdQuerry(locationId));
+            return result != null ? Ok(result) : NotFound("Location does not exist.");
         }
 
         [HttpGet("[action]/{locationName}")]
@@ -42,11 +41,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetLocationByName(string locationName)
         {
-            if (!_locationService.LocationExists(locationName))
-                return NotFound("Location does not exist");
-
-            var location = _locationService.GetLocationByName(locationName);
-            return Ok(location);
+            var result = await _mediator.Send(new GetLocationByNameQuerry(locationName));
+            return result != null ? Ok(result) : NotFound("Location does not exist.");
         }
 
         [HttpPost("AddLocation")]
