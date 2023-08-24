@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Querries.CountryQuerries;
+using TennisPlayers.Application.Mediator.Querries.TournamentQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
@@ -11,10 +14,12 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class TournamentController : Controller
     {
+        private readonly IMediator _mediator;
         private readonly ITournamentService _tournamentService;
         private readonly ILocationService _locationService;
-        public TournamentController(ITournamentService tournamentService, ILocationService locationService)
+        public TournamentController(IMediator mediator, ITournamentService tournamentService, ILocationService locationService)
         {
+            _mediator = mediator;
             _tournamentService = tournamentService;
             _locationService = locationService;
         }
@@ -22,7 +27,7 @@ namespace iTennisPlayersApi.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllTournaments()
         {
-            var result = await _tournamentService.GetAllTournaments();
+            var result = await _mediator.Send(new GetAllTournamentsQuerry());
             return Ok(result);
         }
 
@@ -31,11 +36,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTournamentById(int tournamentId)
         {
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist");
-
-            var tournament = _tournamentService.GetTournamentById(tournamentId);
-            return Ok(tournament);
+            var result = await _mediator.Send(new GetTournamentByIdQuerry(tournamentId));
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpGet("[action]/{tournamentName}")]
@@ -43,11 +45,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTournamentByName(string tournamentName)
         {
-            if (!_tournamentService.TournamentExists(tournamentName))
-                return NotFound("Tournament does not exist");
-
-            var tournament = _tournamentService.GetTournamentByName(tournamentName);
-            return Ok(tournament);
+            var result = await _mediator.Send(new GetTournamentByNameQuerry(tournamentName));
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpPost("AddTournament")]
