@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.CountryCommands;
+using TennisPlayers.Application.Mediator.Commands.LocationCommands;
 using TennisPlayers.Application.Mediator.Querries.CountryQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
@@ -51,59 +53,33 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddCountry")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddCountry([FromBody] CountryDto countryDto)
+        public async Task<IActionResult> AddCountry([FromBody] CountryDto countryDto)
         {
-            var validator = new CountryValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_countryService.AddCountry(countryDto))
-            {
-                ModelState.AddModelError("", "Error adding new country.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(countryDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Country added successfully.");
+            var result = await _mediator.Send(new CreateCountryCommand(countryDto));
+            return result == true ? StatusCode(200, "Country added successfully.") : BadRequest(ModelState);
         }
 
         [HttpPut("UpdateCountry")]
-        public IActionResult UpdateCountry(int countryId, [FromBody] CountryDto countryDto)
+        public async Task<IActionResult> UpdateCountry(int countryId, [FromBody] CountryDto countryDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_countryService.CountryExists(countryId))
-                return NotFound("Country does not exist.");
-
-            if (!_countryService.UpdateCountry(countryId, countryDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateCountryCommand(countryId, countryDto));
+            return result == true ? StatusCode(200, "Country updated successfully.") : BadRequest(ModelState);
         }
 
         [HttpDelete("DeleteCountry")]
         public async Task<IActionResult> DeleteCountry(int countryId)
         {
-            if (!_countryService.CountryExists(countryId))
-                return NotFound("Country not found.");
-
-            var countryToDelete = _countryService.GetCountryById(countryId);
-
-            if (!_countryService.DeleteCountry(countryToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Country deleted successfully.");
+            var result = await _mediator.Send(new DeleteCountryCommand(countryId));
+            return result == true ? StatusCode(200, "Country deleted successfully.") : NotFound("Country does not exist.");
         }
     }
 }

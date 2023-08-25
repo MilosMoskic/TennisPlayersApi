@@ -66,5 +66,12 @@ namespace TennisPlayers.Application.Services
 
             return _countryRepository.UpdateCountry(countryMapped);
         }
+
+        public async Task<CountryDto> GetCountryByCountryIdAsNoTracking(int countryId)
+        {
+            var country = await _countryRepository.GetCountryByCountryIdAsNoTracking(countryId);
+            var countryMapper = _mapper.Map<CountryDto>(country);
+            return countryMapper;
+        }
     }
 }

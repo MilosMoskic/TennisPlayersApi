@@ -7,6 +7,7 @@ namespace TennisPlayers.Application.Interfaces
         public Task<List<CountryDto>> GetAllCountries();
         public CountryDto GetCountryById(int id);
         public CountryDto GetCountryByName(string name);
+        public Task<CountryDto> GetCountryByCountryIdAsNoTracking(int countryId);
         public bool CountryExists(int id);
         public bool CountryExists(string country);
         public bool AddCountry(CountryDto countryDto);
