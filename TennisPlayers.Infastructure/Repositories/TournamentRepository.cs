@@ -41,6 +41,10 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Tournaments.ToListAsync();
         }
+        public async Task<Tournament> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        {
+            return await _context.Tournaments.Where(c => c.Id == tournamentId).AsNoTracking().FirstOrDefaultAsync();
+        }
 
         public bool Save()
         {

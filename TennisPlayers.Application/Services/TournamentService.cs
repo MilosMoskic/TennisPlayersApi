@@ -70,5 +70,11 @@ namespace TennisPlayers.Application.Services
 
             return _tournamentRepository.UpdateTournament(tournamentMapped);
         }
+        public async Task<TournamentDto> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        {
+            var tournament = await _tournamentRepository.GetTournamentByTournamentIdAsNoTracking(tournamentId);
+            var tournamentMapper = _mapper.Map<TournamentDto>(tournament);
+            return tournamentMapper;
+        }
     }
 }

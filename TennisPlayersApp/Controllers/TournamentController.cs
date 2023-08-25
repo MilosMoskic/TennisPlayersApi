@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.SponsorCommands;
+using TennisPlayers.Application.Mediator.Commands.TournamentCommands;
 using TennisPlayers.Application.Mediator.Querries.CountryQuerries;
 using TennisPlayers.Application.Mediator.Querries.TournamentQuerries;
 using TennisPlayers.Application.Services;
@@ -52,62 +54,33 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddTournament")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
+        public async Task<IActionResult> AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
         {
-            var validator = new TournamentValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist");
-
-            if (!_tournamentService.AddTournament(locationId, tournamentDto))
-            {
-                ModelState.AddModelError("", "Error adding new tournament.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(tournamentDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Tournament added successfully.");
+            var result = await _mediator.Send(new CreateTournamentCommand(tournamentDto, locationId));
+            return result == true ? StatusCode(200, "Tournament added successfully.") : BadRequest(ModelState);
         }
 
         [HttpPut("UpdateTournament")]
-        public IActionResult UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
+        public async Task<IActionResult> UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist.");
-
-            if (!_tournamentService.UpdateTournament(tournamentId, tournamentDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateTournamentCommand(tournamentId, tournamentDto));
+            return result == true ? StatusCode(200, "Tournament updated successfully.") : BadRequest(ModelState);
         }
 
         [HttpDelete("DeleteTournament")]
         public async Task<IActionResult> DeleteTournament(int tournamentId)
         {
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament not found.");
-
-            var tournamentToDelete = _tournamentService.GetTournamentById(tournamentId);
-
-            if (!_tournamentService.DeleteTournament(tournamentToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Tournament deleted successfully.");
+            var result = await _mediator.Send(new DeleteTournamentCommand(tournamentId));
+            return result == true ? StatusCode(200, "Tournament deleted successfully.") : NotFound("Tournament does not exist.");
         }
     }
 }
