@@ -1,4 +1,5 @@
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TennisPlayers.Application.Dto;
@@ -15,7 +16,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddFluentValidation(options =>
+    {
+        // Validate child properties and root collection elements
+        options.ImplicitlyValidateChildProperties = true;
+        options.ImplicitlyValidateRootCollectionElements = true;
+
+        // Automatic registration of validators in assembly
+        options.RegisterValidatorsFromAssemblyContaining<AthleteValidator>();
+    });
 
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAthleteService, AthleteService>();

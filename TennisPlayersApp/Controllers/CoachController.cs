@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 using TennisPlayers.Application.Mediator.Querries.CoachQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
@@ -36,7 +37,7 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachById(int coachId)
         {
-            var result = _mediator.Send(new GetCoachByIdQuerry(coachId));
+            var result = await _mediator.Send(new GetCoachByIdQuerry(coachId));
             return result != null ? Ok(result) : NotFound("Coach does not exist.");
         }
 
@@ -52,27 +53,13 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddCoach")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddCoach([FromBody] CoachDto coachDto)
+        public async Task<IActionResult> AddCoach([FromBody] CoachDto coachDto)
         {
-            var validator = new CoachValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_coachService.AddCoach(coachDto))
-            {
-                ModelState.AddModelError("", "Error adding new coach.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(coachDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Coach added successfully.");
+            var result = await _mediator.Send(new CreateCoachCommand(coachDto));
+            return result == true ? StatusCode(200, "Coach added successfully.") : BadRequest(ModelState);
         }
 
         [HttpPut("UpdateCoach")]
