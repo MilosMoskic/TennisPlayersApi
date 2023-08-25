@@ -63,35 +63,23 @@ namespace iTennisPlayersApi.Controllers
         }
 
         [HttpPut("UpdateCoach")]
-        public IActionResult UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
+        public async Task<IActionResult> UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach does not exist.");
-
-            if (!_coachService.UpdateCoach(coachId, coachDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateCoachCommand(coachDto, coachId));
+            return result == true ? StatusCode(200, "Coach updated successfully.") : BadRequest(ModelState);
         }
 
         [HttpDelete("DeleteCoach")]
         public async Task<IActionResult> DeleteCoach(int coachId)
         {
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach not found.");
-
-            var coachToDelete = _coachService.GetCoachById(coachId);
-
-            if (!_coachService.DeleteCoach(coachToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Coach deleted successfully.");
+            var result = await _mediator.Send(new DeleteCoachCommand(coachId));
+            return result == true ? StatusCode(200, "Coach deleted successfully.") : NotFound("Coach does not exist.");
         }
     }
 }

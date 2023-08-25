@@ -13,5 +13,6 @@ namespace TennisPlayers.Application.Interfaces
         public bool AddCoach(CoachDto coachDto);
         public bool UpdateCoach(int coachId, CoachDto coachDto);
         public bool DeleteCoach(CoachDto coachDto);
+        public Task<CoachDto> GetCoachByCoachIdAsNoTracking(int coachId);
     }
 }

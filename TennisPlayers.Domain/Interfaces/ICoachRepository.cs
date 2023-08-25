@@ -13,5 +13,6 @@ namespace TennisPlayers.Domain.Interfaces
         bool UpdateCoach(Coach coach);
         bool DeleteCoach(Coach coach);
         bool Save();
+        Task<Coach> GetCoachByCoachIdAsNoTracking(int coachId);
     }
 }
