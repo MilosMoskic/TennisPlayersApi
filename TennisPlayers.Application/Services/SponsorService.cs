@@ -68,6 +68,13 @@ namespace TennisPlayers.Application.Services
             return sponsorsMapped;
         }
 
+        public async Task<SponsorDto> GetSponsorBySponsorIdAsNoTracking(int sponsorId)
+        {
+            var sponsor = await _sponsorRepository.GetSponsorBySponsorIdAsNoTracking(sponsorId);
+            var sponsorMapper = _mapper.Map<SponsorDto>(sponsor);
+            return sponsorMapper;
+        }
+
         public bool SponsorExists(int id)
         {
             return _sponsorRepository.SponsorExists(id);
@@ -81,7 +88,7 @@ namespace TennisPlayers.Application.Services
         public bool UpdateSponsor(int sponsorId, SponsorDto sponsorDto)
         {
             var sponsorMapped = _mapper.Map<Sponsor>(sponsorDto);
-            sponsorDto.Id = sponsorId;
+            sponsorMapped.Id = sponsorId;
 
             return _sponsorRepository.UpdateSponsor(sponsorMapped);
         }

@@ -8,6 +8,7 @@ namespace TennisPlayers.Domain.Interfaces
         Sponsor GetSponsor(int id);
         Sponsor GetSponsor(string name);
         Task<List<Sponsor>> GetAllSponsorsByNW(decimal netWorth);
+        Task<Sponsor> GetSponsorBySponsorIdAsNoTracking(int sponsorId);
         bool SponsorExists(int id);
         bool SponsorExists(string sponsor);
         bool AddSponsor(Sponsor sponsor);
