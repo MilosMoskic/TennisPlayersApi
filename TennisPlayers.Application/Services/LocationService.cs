@@ -64,5 +64,12 @@ namespace TennisPlayers.Application.Services
 
             return _locationRepository.UpdateLocation(locationMapped);
         }
+
+        public async Task<LocationDto> GetLocationByLocationIdAsNoTracking(int locationId)
+        {
+            var location = await _locationRepository.GetLocationByLocationIdAsNoTracking(locationId);
+            var locationMapper = _mapper.Map<LocationDto>(location);
+            return locationMapper;
+        }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.CoachCommands;
+using TennisPlayers.Application.Mediator.Commands.LocationCommands;
 using TennisPlayers.Application.Mediator.Querries.LocationQuerries;
 using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
@@ -48,59 +50,33 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddLocation")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddLocation([FromBody] LocationDto locationDto)
+        public async Task<IActionResult> AddLocation([FromBody] LocationDto locationDto)
         {
-            var validator = new LocationValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_locationService.AddLocation(locationDto))
-            {
-                ModelState.AddModelError("", "Error adding new location.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(locationDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Location added successfully.");
+            var result = await _mediator.Send(new CreateLocationCommand(locationDto));
+            return result == true ? StatusCode(200, "Location added successfully.") : BadRequest(ModelState);
         }
 
         [HttpPut("UpdateLocation")]
-        public IActionResult UpdateLocation(int locationId, [FromBody] LocationDto locationDto)
+        public async Task<IActionResult> UpdateLocation(int locationId, [FromBody] LocationDto locationDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist.");
-
-            if (!_locationService.UpdateLocation(locationId, locationDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateLocationCommand(locationDto, locationId));
+            return result == true ? StatusCode(200, "Location updated successfully.") : BadRequest(ModelState);
         }
 
         [HttpDelete("DeleteLocation")]
         public async Task<IActionResult> DeleteLocation(int locationId)
         {
-            if (!_locationService.LocationExists(locationId))
-                return NotFound("Location not found.");
-
-            var locationToDelete = _locationService.GetLocationById(locationId);
-
-            if (!_locationService.DeleteLocation(locationToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Location deleted successfully.");
+            var result = await _mediator.Send(new DeleteLocationCommand(locationId));
+            return result == true ? StatusCode(200, "Location deleted successfully.") : NotFound("Location does not exist.");
         }
     }
 }

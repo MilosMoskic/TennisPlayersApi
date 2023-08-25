@@ -42,6 +42,10 @@ namespace TennisPlayers.Infastructure.Repositories
             _context.Locations.Add(location);
             return Save();
         }
+        public async Task<Location> GetLocationByLocationIdAsNoTracking(int locationId)
+        {
+            return await _context.Locations.Where(c => c.Id == locationId).AsNoTracking().FirstOrDefaultAsync();
+        }
 
         public bool Save()
         {
