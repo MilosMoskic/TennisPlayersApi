@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Querries.AthleteQuerries;
 
-namespace TennisPlayers.Application.Mediator.Querries.AthleteQuerries
+namespace TennisPlayers.Application.Mediator.Querries.AthleteHandlers
 {
     public class GetAthleteByRankingHandler : IRequestHandler<GetAthleteByRankingQuerry, AthleteDto>
     {

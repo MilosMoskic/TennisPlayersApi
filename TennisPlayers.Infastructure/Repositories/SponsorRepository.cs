@@ -51,9 +51,9 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Sponsors.Where(s => s.Name == name).FirstOrDefault();
         }
-        public async Task<Sponsor> GetSponsorBySponsorIdAsNoTracking(int sponsorId)
+        public Sponsor GetSponsorBySponsorIdAsNoTracking(int sponsorId)
         {
-            return await _context.Sponsors.Where(c => c.Id == sponsorId).AsNoTracking().FirstOrDefaultAsync();
+            return _context.Sponsors.Where(c => c.Id == sponsorId).AsNoTracking().FirstOrDefault();
         }
 
         public Task<List<Sponsor>> GetSponsors()

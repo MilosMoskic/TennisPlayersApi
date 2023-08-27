@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.AthleteCommands;
+using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 using TennisPlayers.Application.Mediator.Querries.AthleteQuerries;
 using TennisPlayers.Application.Services;
 using TennisPlayers.Application.Validators;
@@ -71,15 +73,6 @@ namespace iTennisPlayersApi.Controllers
             return result != null ? Ok(result) : NotFound("Athlete does not exist.");
         }
 
-        [HttpGet("[action]/{tournamentId}")]
-        [ProducesResponseType(200, Type = typeof(Athlete))]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAthleteByTournament(int tournamentId)
-        {
-            var result = await _mediator.Send(new GetAthletesByTournamentQuerry(tournamentId));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
-        }
-
         [HttpGet("[action]/{sponsorId}")]
         [ProducesResponseType(200, Type = typeof(Athlete))]
         [ProducesResponseType(400)]
@@ -101,124 +94,92 @@ namespace iTennisPlayersApi.Controllers
         [HttpPost("AddAthelete")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddAthelete([FromQuery] int countryId, [FromQuery] int coachId, [FromBody] AthleteDto athleteDto)
-        {
-            var validator = new AthleteValidator();
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (!_countryService.CountryExists(countryId))
-                return NotFound("Country does not exist");
-
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach does not exist");
-
-            var validationResult = validator.Validate(athleteDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            if (!_athleteService.AddAthlete(coachId, countryId, athleteDto))
-            {
-                ModelState.AddModelError("", "Error adding new athlete.");
-                return BadRequest(ModelState);
-            }
-
-            return Ok("Athlete added successfully.");
-        }
-
-        [HttpPost("AddAtheleteToTournament")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult AddAthleteToTournament([FromQuery] int athleteId, [FromQuery] int tournamentId)
+        public async Task<IActionResult> AddAthelete([FromQuery] int countryId, [FromQuery] int coachId, [FromBody] AthleteDto athleteDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete does not exist");
-
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist");
-
-            if (!_athleteService.AddAthleteToTournament(athleteId, tournamentId))
-            {
-                ModelState.AddModelError("", "Error adding athlete to tournament.");
-                return BadRequest(ModelState);
-            }
-
-            return Ok("Successfully added Athlete to a Tournament.");
+            var result = await _mediator.Send(new CreateAthleteCommand(athleteDto, countryId, coachId));
+            return result == true ? StatusCode(200, "Athlete added successfully.") : BadRequest(ModelState);
         }
+
+        //[HttpPost("AddAtheleteToTournament")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        //public IActionResult AddAthleteToTournament([FromQuery] int athleteId, [FromQuery] int tournamentId)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    if (!_athleteService.AthleteExists(athleteId))
+        //        return NotFound("Athlete does not exist");
+
+        //    if (!_tournamentService.TournamentExists(tournamentId))
+        //        return NotFound("Tournament does not exist");
+
+        //    if (!_athleteService.AddAthleteToTournament(athleteId, tournamentId))
+        //    {
+        //        ModelState.AddModelError("", "Error adding athlete to tournament.");
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    return Ok("Successfully added Athlete to a Tournament.");
+        //}
 
         [HttpPut("UpdateAthlete")]
-        public IActionResult UpdateAthlete(int athleteId, [FromBody] AthleteDto athleteDto)
+        public async Task<IActionResult> UpdateAthlete(int athleteId, [FromBody] AthleteDto athleteDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete does not exist.");
-
-            if (!_athleteService.UpdateAthlete(athleteId, athleteDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateAthleteCommand(athleteDto, athleteId));
+            return result == true ? StatusCode(200, "Athlete updated successfully.") : BadRequest(ModelState);
         }
 
         [HttpDelete("DeleteAthlete")]
         public async Task<IActionResult> DeleteAthlete(int athleteId)
         {
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete not found.");
-
-            var athleteToDelete = _athleteService.GetAthleteById(athleteId);
-
-            if (!_athleteService.DeleteAthlete(athleteToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Athlete deleted successfully.");
+            var result = await _mediator.Send(new DeleteAthleteCommand(athleteId));
+            return result == true ? StatusCode(200, "Athlete deleted successfully.") : NotFound("Athlete does not exist.");
         }
 
-        [HttpDelete("RemoveAthleteFromTournament")]
-        public async Task<IActionResult> RemoveAthleteFromTournament(int athleteId, int tournamentId)
-        {
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete not found.");
+        //[HttpDelete("RemoveAthleteFromTournament")]
+        //public async Task<IActionResult> RemoveAthleteFromTournament(int athleteId, int tournamentId)
+        //{
+        //    if (!_athleteService.AthleteExists(athleteId))
+        //        return NotFound("Athlete not found.");
 
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament not found.");
+        //    if (!_tournamentService.TournamentExists(tournamentId))
+        //        return NotFound("Tournament not found.");
 
-            if (!_athleteService.RemoveAthleteFromTournament(athleteId, tournamentId))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
-                return BadRequest(ModelState);
-            }
+        //    if (!_athleteService.RemoveAthleteFromTournament(athleteId, tournamentId))
+        //    {
+        //        ModelState.AddModelError("", "Something went wrong while saving.");
+        //        return BadRequest(ModelState);
+        //    }
 
-            return Ok("Athlete removed successfully.");
-        }
+        //    return Ok("Athlete removed successfully.");
+        //}
 
-        [HttpDelete("RemoveAthleteFromSponsor")]
-        public async Task<IActionResult> RemoveAthleteFromSponsor(int athleteId, int sponsorId)
-        {
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete not found.");
+        //[HttpDelete("RemoveAthleteFromSponsor")]
+        //public async Task<IActionResult> RemoveAthleteFromSponsor(int athleteId, int sponsorId)
+        //{
+        //    if (!_athleteService.AthleteExists(athleteId))
+        //        return NotFound("Athlete not found.");
 
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor not found.");
+        //    if (!_sponsorService.SponsorExists(sponsorId))
+        //        return NotFound("Sponsor not found.");
 
-            if (!_athleteService.RemoveAthleteFromSponsor(athleteId, sponsorId))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
-                return BadRequest(ModelState);
-            }
+        //    if (!_athleteService.RemoveAthleteFromSponsor(athleteId, sponsorId))
+        //    {
+        //        ModelState.AddModelError("", "Something went wrong while saving.");
+        //        return BadRequest(ModelState);
+        //    }
 
-            return Ok("Athlete removed successfully.");
-        }
+        //    return Ok("Athlete removed successfully.");
+        //}
     }
 }

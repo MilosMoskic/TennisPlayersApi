@@ -27,9 +27,13 @@ namespace TennisPlayers.Infastructure.Repositories
             return Save();
         }
 
-        public Tournament GetTournament(int id)
+        public async Task<Tournament> GetTournamentAsync(int id)
         {
-            return _context.Tournaments.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
+            return await _context.Tournaments.FirstOrDefaultAsync(a => a.Id == id);
+        }
+        public async Task<Tournament> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        {
+            return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(a => a.Id == tournamentId);
         }
 
         public Tournament GetTournament(string name)
@@ -40,10 +44,6 @@ namespace TennisPlayers.Infastructure.Repositories
         public Task<List<Tournament>> GetTournaments()
         {
             return _context.Tournaments.ToListAsync();
-        }
-        public async Task<Tournament> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
-        {
-            return await _context.Tournaments.Where(c => c.Id == tournamentId).AsNoTracking().FirstOrDefaultAsync();
         }
 
         public bool Save()

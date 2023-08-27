@@ -41,7 +41,7 @@ namespace TennisPlayers.Application.Services
 
         public TournamentDto GetTournamentById(int id)
         {
-            var tournament = _tournamentRepository.GetTournament(id);
+            var tournament = _tournamentRepository.GetTournamentAsync(id);
             var tournamentMapped = _mapper.Map<TournamentDto>(tournament);
             return tournamentMapped;
         }
@@ -70,9 +70,9 @@ namespace TennisPlayers.Application.Services
 
             return _tournamentRepository.UpdateTournament(tournamentMapped);
         }
-        public async Task<TournamentDto> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        public TournamentDto GetTournamentByTournamentIdAsNoTracking(int tournamentId)
         {
-            var tournament = await _tournamentRepository.GetTournamentByTournamentIdAsNoTracking(tournamentId);
+            var tournament = _tournamentRepository.GetTournamentByTournamentIdAsNoTracking(tournamentId);
             var tournamentMapper = _mapper.Map<TournamentDto>(tournament);
             return tournamentMapper;
         }

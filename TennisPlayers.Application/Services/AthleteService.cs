@@ -36,14 +36,6 @@ namespace TennisPlayers.Application.Services
             return _athleteRepository.AddAthlete(coach, country, athleteMapped);
         }
 
-        public bool AddAthleteToTournament(int athleteId, int tournamentId)
-        {
-            var athlete = _athleteRepository.GetAthlete(athleteId);
-            var tournament = _tournamentRepository.GetTournament(tournamentId);
-
-            return _athleteRepository.AddAthleteToTournament(athlete, tournament);
-        }
-
         public bool AthleteExists(int id)
         {
             return _athleteRepository.AthleteExists(id);
@@ -69,7 +61,7 @@ namespace TennisPlayers.Application.Services
 
         public AthleteDto GetAthleteById(int id)
         {
-            var athlete = _athleteRepository.GetAthlete(id);
+            var athlete = _athleteRepository.GetAthleteAsync(id);
             var athleteMapped = _mapper.Map<AthleteDto>(athlete);
             return athleteMapped;
         }
@@ -83,7 +75,7 @@ namespace TennisPlayers.Application.Services
 
         public AthleteDto GetAthleteByRanking(int ranking)
         {
-            var athlete = _athleteRepository.GetAthlete(ranking);
+            var athlete = _athleteRepository.GetAthleteAsync(ranking);
             var athleteMapped = _mapper.Map<AthleteDto>(athlete);
             return athleteMapped;
         }
@@ -95,17 +87,17 @@ namespace TennisPlayers.Application.Services
             return athletesMapped;
         }
 
-        public async Task<List<AthleteDto>> GetAthletesByTournament(int tournamentId)
-        {
-            var athletes = _athleteRepository.GetAthletesByTournament(tournamentId);
-            var athletesMapped = _mapper.Map<List<AthleteDto>>(athletes);
-            return athletesMapped;
-        }
-
         public decimal GetAthleteWinPercent(string name)
         {
             var athlete = _athleteRepository.GetAthleteWinPercent(name);
             return athlete;
+        }
+
+        public async Task<AthleteDto> GetAthleteByAthleteIdAsNoTracking(int athleteId)
+        {
+            var athlete = _athleteRepository.GetAthleteByAthleteIdAsNoTracking(athleteId);
+            var athleteMapper = _mapper.Map<AthleteDto>(athlete);
+            return athleteMapper;
         }
 
         public bool UpdateAthlete(int athleteId, AthleteDto athleteDto)
@@ -114,11 +106,6 @@ namespace TennisPlayers.Application.Services
             athleteMapped.Id = athleteId;
 
             return _athleteRepository.UpdateAthlete(athleteMapped);
-        }
-
-        public bool RemoveAthleteFromTournament(int athleteId, int tournamentId)
-        {
-            return _athleteRepository.RemoveAthleteFromTournament(athleteId, tournamentId);
         }
 
         public bool RemoveAthleteFromSponsor(int athleteId, int sponsorId)

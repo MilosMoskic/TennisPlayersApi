@@ -28,10 +28,11 @@ namespace TennisPlayers.Application.Services
 
         public bool AddSponsorToAthlete(int athleteId, int sponsorId)
         {
-            var athlete = _athleteRepository.GetAthlete(athleteId);
+            var athlete = _athleteRepository.GetAthleteAsync(athleteId);
             var sponsor = _sponsorRepository.GetSponsor(sponsorId);
+            var athleteMapped = _mapper.Map<Athlete>(athlete);
 
-            return _sponsorRepository.AddSponsorToAthlete(athlete, sponsor);
+            return _sponsorRepository.AddSponsorToAthlete(athleteMapped, sponsor);
         }
 
         public bool DeleteSponsor(SponsorDto sponsorDto)
@@ -70,7 +71,7 @@ namespace TennisPlayers.Application.Services
 
         public async Task<SponsorDto> GetSponsorBySponsorIdAsNoTracking(int sponsorId)
         {
-            var sponsor = await _sponsorRepository.GetSponsorBySponsorIdAsNoTracking(sponsorId);
+            var sponsor = _sponsorRepository.GetSponsorBySponsorIdAsNoTracking(sponsorId);
             var sponsorMapper = _mapper.Map<SponsorDto>(sponsor);
             return sponsorMapper;
         }

@@ -13,9 +13,9 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             _context = context;
         }
-        public Athlete GetAthlete(int id)
+        public async Task<Athlete> GetAthleteAsync(int id)
         {
-            return _context.Athletes.Where(a => a.Id == id).AsNoTracking().FirstOrDefault();
+            return await _context.Athletes.FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public Athlete GetAthlete(string lastName)
@@ -23,13 +23,14 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Athletes.Where(a => a.LastName == lastName).FirstOrDefault();
         }
 
+        public async Task<Athlete> GetAthleteByAthleteIdAsNoTracking(int athleteId)
+        {
+            return await _context.Athletes.AsNoTracking().FirstOrDefaultAsync(a => a.Id == athleteId);
+        }
+
         public Athlete GetAthleteByRanking(int ranking)
         {
             return _context.Athletes.Where(a => a.Ranking == ranking).FirstOrDefault();
-        }
-        public ICollection<Athlete> GetAthletesByTournament(int tournamentId)
-        {
-            return _context.AthleteTournaments.Where(a => a.TournamentId == tournamentId).Select(a => a.Athlete).ToList();
         }
 
         public Task<List<Athlete>> GetAllAthletes()
@@ -68,17 +69,6 @@ namespace TennisPlayers.Infastructure.Repositories
             _context.Athletes.Add(athlete);
             return Save();
         }
-        public bool AddAthleteToTournament(Athlete athlete, Tournament tournament)
-        {
-            var athleteTournament = new AthleteTournament()
-            {
-                Athlete = athlete,
-                Tournament = tournament,
-            };
-
-            _context.AthleteTournaments.Add(athleteTournament);
-            return Save();
-        }
 
         public bool Save()
         {
@@ -95,16 +85,6 @@ namespace TennisPlayers.Infastructure.Repositories
         public bool DeleteAthlete(Athlete athlete)
         {
             _context.Remove(athlete);
-            return Save();
-        }
-
-        public bool RemoveAthleteFromTournament(int athleteId, int tournamentId)
-        {
-            var athleteTournament = _context.AthleteTournaments
-                .Where(a => a.AthleteId == athleteId)
-                .Where(t => t.TournamentId == tournamentId).FirstOrDefault();
-
-            _context.AthleteTournaments.Remove(athleteTournament);
             return Save();
         }
 

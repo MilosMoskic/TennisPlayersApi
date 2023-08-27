@@ -18,9 +18,9 @@ namespace TennisPlayers.Application.Mediator.Handlers.LocationHandlers
             if (!_locationService.LocationExists(request.LocationId))
                 return false;
 
-            var coachToDelete = await _locationService.GetLocationByLocationIdAsNoTracking(request.LocationId);
+            var locationToDelete = await _locationService.GetLocationByLocationIdAsNoTracking(request.LocationId);
 
-            return _locationService.DeleteLocation(coachToDelete);
+            return _locationService.DeleteLocation(locationToDelete);
         }
     }
 }

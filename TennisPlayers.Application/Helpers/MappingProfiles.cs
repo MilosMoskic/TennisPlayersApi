@@ -10,6 +10,7 @@ namespace TennisPlayers.Application.Helpers
         {
             CreateMap<Athlete, AthleteDto>();
             CreateMap<AthleteDto, Athlete>();
+            CreateMap<Task<Athlete>, Athlete>();
             CreateMap<Coach, CoachDto>();
             CreateMap<CoachDto, Coach>();
             CreateMap<Country, CountryDto>();
@@ -20,6 +21,8 @@ namespace TennisPlayers.Application.Helpers
             CreateMap<LocationDto, Location>();
             CreateMap<Tournament, TournamentDto>();
             CreateMap<TournamentDto, Tournament>();
+            CreateMap<Task<Tournament>, Tournament>();
+            CreateMap<AthleteTournamentDto, AthleteTournament>();
         }
     }
 }

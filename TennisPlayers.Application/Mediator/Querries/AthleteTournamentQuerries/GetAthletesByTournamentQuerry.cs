@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TennisPlayers.Application.Dto;
 
-namespace TennisPlayers.Application.Mediator.Querries.AthleteQuerries
+namespace TennisPlayers.Application.Mediator.Querries.AthleteTournamentQuerries
 {
     public class GetAthletesByTournamentQuerry : IRequest<List<AthleteDto>>
     {

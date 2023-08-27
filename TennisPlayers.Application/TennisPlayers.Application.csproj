@@ -18,8 +18,4 @@
     <ProjectReference Include="..\TennisPlayers.Domain\TennisPlayers.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mediator\Commands\AthleteCommands\" />
-  </ItemGroup>
-
 </Project>
