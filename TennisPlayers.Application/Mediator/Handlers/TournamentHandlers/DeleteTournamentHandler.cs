@@ -17,7 +17,7 @@ namespace TennisPlayers.Application.Mediator.Handlers.TournamentHandlers
             if (!_tournamentService.TournamentExists(request.TournamentId))
                 return false;
 
-            var sponsorToDelete = _tournamentService.GetTournamentByTournamentIdAsNoTracking(request.TournamentId);
+            var sponsorToDelete = await _tournamentService.GetTournamentByTournamentIdAsNoTracking(request.TournamentId);
 
             return _tournamentService.DeleteTournament(sponsorToDelete);
         }

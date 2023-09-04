@@ -17,6 +17,10 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return await _context.Athletes.FirstOrDefaultAsync(a => a.Id == id);
         }
+        public Athlete GetAthlete(int id)
+        {
+            return _context.Athletes.FirstOrDefault(a => a.Id == id);
+        }
 
         public Athlete GetAthlete(string lastName)
         {

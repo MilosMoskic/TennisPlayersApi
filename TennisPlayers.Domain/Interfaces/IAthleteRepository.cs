@@ -6,9 +6,10 @@ namespace TennisPlayers.Domain.Interfaces
     {
         Task<List<Athlete>> GetAllAthletes();
         Task<Athlete> GetAthleteAsync(int id);
+        Athlete GetAthlete(int id);
         Athlete GetAthlete(string lastName);
         Athlete GetAthleteByRanking(int ranking);
-        public decimal GetAthleteWinPercent(string name);
+        decimal GetAthleteWinPercent(string name);
         ICollection<Athlete> GetAthletesBySponsor(int sponsorId);
         Task<Athlete> GetAthleteByAthleteIdAsNoTracking(int athleteId);
         bool AthleteExists(int id);

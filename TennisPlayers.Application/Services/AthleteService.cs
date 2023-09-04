@@ -61,7 +61,7 @@ namespace TennisPlayers.Application.Services
 
         public AthleteDto GetAthleteById(int id)
         {
-            var athlete = _athleteRepository.GetAthleteAsync(id);
+            var athlete = _athleteRepository.GetAthlete(id);
             var athleteMapped = _mapper.Map<AthleteDto>(athlete);
             return athleteMapped;
         }
@@ -75,7 +75,7 @@ namespace TennisPlayers.Application.Services
 
         public AthleteDto GetAthleteByRanking(int ranking)
         {
-            var athlete = _athleteRepository.GetAthleteAsync(ranking);
+            var athlete = _athleteRepository.GetAthleteByRanking(ranking);
             var athleteMapped = _mapper.Map<AthleteDto>(athlete);
             return athleteMapped;
         }
@@ -95,7 +95,7 @@ namespace TennisPlayers.Application.Services
 
         public async Task<AthleteDto> GetAthleteByAthleteIdAsNoTracking(int athleteId)
         {
-            var athlete = _athleteRepository.GetAthleteByAthleteIdAsNoTracking(athleteId);
+            var athlete = await _athleteRepository.GetAthleteByAthleteIdAsNoTracking(athleteId);
             var athleteMapper = _mapper.Map<AthleteDto>(athlete);
             return athleteMapper;
         }
