@@ -7,6 +7,7 @@ namespace TennisPlayers.Domain.Interfaces
         Task<List<Tournament>> GetTournaments();
         Task<Tournament> GetTournamentAsync(int id);
         Tournament GetTournament(string name);
+        Tournament GetTournament(int id);
         Task<Tournament> GetTournamentByTournamentIdAsNoTracking(int tournamentId);
         bool TournamentExists(int id);
         bool TournamentExists(string name);

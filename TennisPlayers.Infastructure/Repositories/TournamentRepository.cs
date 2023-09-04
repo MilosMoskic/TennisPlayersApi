@@ -35,6 +35,10 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(a => a.Id == tournamentId);
         }
+        public Tournament GetTournament(int id)
+        {
+            return _context.Tournaments.FirstOrDefault(t => t.Id == id);
+        }
 
         public Tournament GetTournament(string name)
         {

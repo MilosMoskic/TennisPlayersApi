@@ -1,13 +1,8 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using TennisPlayers.Application.Dto;
+using Microsoft.AspNetCore.Mvc;using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Mediator.Commands.SponsorCommands;
 using TennisPlayers.Application.Mediator.Commands.TournamentCommands;
-using TennisPlayers.Application.Mediator.Querries.CountryQuerries;
 using TennisPlayers.Application.Mediator.Querries.TournamentQuerries;
-using TennisPlayers.Application.Services;
-using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
