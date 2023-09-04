@@ -34,5 +34,17 @@ namespace iTennisPlayersApi.Controllers
             var result = await _mediator.Send(new AddAthleteToTournamentCommand(athleteId, tournamentId, athleteTournamentDto));
             return result != null ? Ok(result) : NotFound("Tournament does not exist.");
         }
+
+        [HttpDelete("RemoveAthleteFromTournament")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> RemoveAthleteFromTournament(int athleteId, int tournamentId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _mediator.Send(new RemoveAthleteFromTournamentCommand(athleteId, tournamentId));
+            return result != null ? Ok(result) : NotFound("Tournament does not exist.");
+        }
     }
 }

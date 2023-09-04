@@ -26,8 +26,8 @@ namespace TennisPlayers.Application.Services
 
         public bool AddAthleteToTournament(int athleteId, int tournamentId, AthleteTournamentDto athleteTournamentDto)
         {
-            var athlete = _athleteRepository.GetAthleteByAthleteIdAsNoTracking(athleteId);
-            var tournament = _tournamentRepository.GetTournamentByTournamentIdAsNoTracking(tournamentId);
+            var athlete = _athleteRepository.GetAthlete(athleteId);
+            var tournament = _tournamentRepository.GetTournament(tournamentId);
             var athleteMapped = _mapper.Map<Athlete>(athlete);
             var tournamentMapped = _mapper.Map<Tournament>(tournament);
 
