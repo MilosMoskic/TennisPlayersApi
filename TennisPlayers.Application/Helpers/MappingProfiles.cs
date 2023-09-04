@@ -8,21 +8,15 @@ namespace TennisPlayers.Application.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<Athlete, AthleteDto>();
-            CreateMap<AthleteDto, Athlete>();
-            CreateMap<Task<Athlete>, Athlete>();
-            CreateMap<Coach, CoachDto>();
-            CreateMap<CoachDto, Coach>();
-            CreateMap<Country, CountryDto>();
-            CreateMap<CountryDto, Country>();
-            CreateMap<Sponsor, SponsorDto>();
-            CreateMap<SponsorDto, Sponsor>();
-            CreateMap<Location, LocationDto>();
-            CreateMap<LocationDto, Location>();
-            CreateMap<Tournament, TournamentDto>();
-            CreateMap<TournamentDto, Tournament>();
-            CreateMap<Task<Tournament>, Tournament>();
-            CreateMap<AthleteTournamentDto, AthleteTournament>();
+            CreateMap<Athlete, AthleteDto>().ReverseMap();
+            CreateMap<Task<Athlete>, AthleteDto>().ReverseMap();
+            CreateMap<Coach, CoachDto>().ReverseMap();
+            CreateMap<Country, CountryDto>().ReverseMap();
+            CreateMap<Sponsor, SponsorDto>().ReverseMap();
+            CreateMap<Location, LocationDto>().ReverseMap();
+            CreateMap<Tournament, TournamentDto>().ReverseMap();
+            CreateMap<Task<Tournament>, TournamentDto>();
+            CreateMap<AthleteTournament, AthleteTournamentDto>().ReverseMap();
         }
     }
 }
