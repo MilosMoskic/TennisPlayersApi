@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
+using TennisPlayers.Application.Mediator.Commands.AthleteSponsorCommands;
 using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 using TennisPlayers.Application.Mediator.Commands.LocationCommands;
 using TennisPlayers.Application.Mediator.Commands.SponsorCommands;
@@ -73,18 +74,6 @@ namespace iTennisPlayersApi.Controllers
 
             var result = await _mediator.Send(new CreateSponsorCommand(sponsorDto));
             return result == true ? StatusCode(200, "Sponsor added successfully.") : BadRequest(ModelState);
-        }
-
-        [HttpPost("AddSponsorToAthlete")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> AddSponsorToAthlete([FromQuery] int athleteId, int sponsorId)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _mediator.Send(new AddSponsorToAthleteCommand(athleteId, sponsorId));
-            return result == true ? StatusCode(200, "Sponsor added to Athlete succesfully.") : NotFound("Sponsor or Athlete does not exist.");
         }
 
         [HttpPut("UpdateSponsor")]

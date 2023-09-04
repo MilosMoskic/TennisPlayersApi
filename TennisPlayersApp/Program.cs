@@ -42,6 +42,8 @@ builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IAthleteTournamentRepository, AthleteTournamentRepository>();
 builder.Services.AddScoped<IAthleteTournamentService, AthleteTournamentService>();
+builder.Services.AddScoped<IAthleteSponsorRepository, AthleteSponsorRepository>();
+builder.Services.AddScoped<IAthleteSponsorService, AthleteSponsorService>();
 
 builder.Services.AddScoped<IValidator<CoachDto>, CoachValidator>();
 builder.Services.AddScoped<IValidator<CountryDto>, CountryValidator>();

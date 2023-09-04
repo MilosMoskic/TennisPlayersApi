@@ -17,6 +17,8 @@ namespace TennisPlayers.Application.Helpers
             CreateMap<Tournament, TournamentDto>().ReverseMap();
             CreateMap<Task<Tournament>, TournamentDto>();
             CreateMap<AthleteTournament, AthleteTournamentDto>().ReverseMap();
+            CreateMap<AthleteSponsor, AthleteSponsorDto>().ReverseMap();
+            CreateMap<Task<Sponsor>, SponsorDto>().ReverseMap();
         }
     }
 }
