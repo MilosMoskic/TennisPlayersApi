@@ -4,13 +4,14 @@ namespace TennisPlayers.Application.Interfaces
 {
     public interface ILocationService
     {
-        public Task<List<LocationDto>> GetAllLocations();
-        public LocationDto GetLocationById(int id);
-        public LocationDto GetLocationByName(string name);
-        public bool LocationExists(int id);
-        public bool LocationExists(string name);
-        public bool AddLocation(LocationDto locationDto);
-        public bool UpdateLocation(int locationId, LocationDto locationDto);
-        public bool DeleteLocation(LocationDto locationDto);
+        Task<List<LocationDto>> GetAllLocations();
+        LocationDto GetLocationById(int id);
+        LocationDto GetLocationByName(string name);
+        Task<LocationDto> GetLocationByLocationIdAsNoTracking(int locationId);
+        bool LocationExists(int id);
+        bool LocationExists(string name);
+        bool AddLocation(LocationDto locationDto);
+        bool UpdateLocation(int locationId, LocationDto locationDto);
+        bool DeleteLocation(LocationDto locationDto);
     }
 }

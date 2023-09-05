@@ -65,5 +65,12 @@ namespace TennisPlayers.Application.Services
             var coach = _mapper.Map<Coach>(coachDto);
             return _coachRepository.DeleteCoach(coach);
         }
+
+        public async Task<CoachDto> GetCoachByCoachIdAsNoTracking(int coachId)
+        {
+            var coach = await _coachRepository.GetCoachByCoachIdAsNoTracking(coachId);
+            var coachMapper = _mapper.Map<CoachDto>(coach);
+            return coachMapper;
+        }
     }
 }

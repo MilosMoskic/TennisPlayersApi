@@ -1,10 +1,9 @@
-﻿using FluentValidation;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
+using TennisPlayers.Application.Mediator.Commands.CoachCommands;
+using TennisPlayers.Application.Mediator.Querries.CoachQuerries;
 using TennisPlayers.Domain.Models;
-using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -12,18 +11,18 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class CoachController : Controller
     {
-        private readonly ICoachService _coachService;
+        private readonly IMediator _mediator;
 
-        public CoachController(ICoachService coachService)
+        public CoachController(IMediator mediator)
         {
-            _coachService = coachService;
+            _mediator = mediator;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCoaches()
         {
-            var result = await _coachService.GetAllCoaches();
-            return Ok(result);
+            var result = await _mediator.Send(new GetAllCoachesQuerry());
+            return result != null ? Ok(result) : NotFound("There are no coaches.");
         }
 
         [HttpGet("[action]/{coachId}")]
@@ -31,11 +30,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachById(int coachId)
         {
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach does not exist");
-
-            var coach = _coachService.GetCoachById(coachId);
-            return Ok(coach);
+            var result = await _mediator.Send(new GetCoachByIdQuerry(coachId));
+            return result != null ? Ok(result) : NotFound($"There is no coach by id {coachId}");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -43,69 +39,40 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetCoachByLastName(string lastName)
         {
-            if (!_coachService.CoachExists(lastName))
-                return NotFound("Coach does not exist");
-
-            var coach = await _coachService.GetCoachesByLastName(lastName);
-            return Ok(coach);
+            var result = await _mediator.Send(new GetCoachesByLastNameQuerry(lastName));
+            return result != null ? Ok(result) : NotFound($"There is no coach by last name {lastName}");
         }
 
         [HttpPost("AddCoach")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddCoach([FromBody] CoachDto coachDto)
+        public async Task<IActionResult> AddCoach([FromBody] CoachDto coachDto)
         {
-            var validator = new CoachValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_coachService.AddCoach(coachDto))
-            {
-                ModelState.AddModelError("", "Error adding new coach.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(coachDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Coach added successfully.");
+            var result = await _mediator.Send(new CreateCoachCommand(coachDto));
+            return result == true ? StatusCode(200, "Coach added successfully.") : BadRequest("Coach is not added successfully.");
         }
 
         [HttpPut("UpdateCoach")]
-        public IActionResult UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
+        public async Task<IActionResult> UpdateCoach(int coachId, [FromBody] CoachDto coachDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach does not exist.");
-
-            if (!_coachService.UpdateCoach(coachId, coachDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateCoachCommand(coachDto, coachId));
+            return result == true ? StatusCode(200, "Coach updated successfully.") : BadRequest("Coach does not exist.");
         }
 
         [HttpDelete("DeleteCoach")]
         public async Task<IActionResult> DeleteCoach(int coachId)
         {
-            if (!_coachService.CoachExists(coachId))
-                return NotFound("Coach not found.");
-
-            var coachToDelete = _coachService.GetCoachById(coachId);
-
-            if (!_coachService.DeleteCoach(coachToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Coach deleted successfully.");
+            var result = await _mediator.Send(new DeleteCoachCommand(coachId));
+            return result == true ? StatusCode(200, "Coach deleted successfully.") : NotFound("Coach does not exist.");
         }
     }
 }

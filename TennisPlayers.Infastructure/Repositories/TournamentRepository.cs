@@ -27,9 +27,17 @@ namespace TennisPlayers.Infastructure.Repositories
             return Save();
         }
 
+        public async Task<Tournament> GetTournamentAsync(int id)
+        {
+            return await _context.Tournaments.FirstOrDefaultAsync(a => a.Id == id);
+        }
+        public async Task<Tournament> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        {
+            return await _context.Tournaments.AsNoTracking().FirstOrDefaultAsync(a => a.Id == tournamentId);
+        }
         public Tournament GetTournament(int id)
         {
-            return _context.Tournaments.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
+            return _context.Tournaments.FirstOrDefault(t => t.Id == id);
         }
 
         public Tournament GetTournament(string name)

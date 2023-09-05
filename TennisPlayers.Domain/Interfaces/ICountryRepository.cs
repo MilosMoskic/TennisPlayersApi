@@ -7,6 +7,7 @@ namespace TennisPlayers.Domain.Interfaces
         Task<List<Country>> GetCountries();
         Country GetCountry(int id);
         Country GetCountry(string name);
+        Task<Country> GetCountryByCountryIdAsNoTracking(int countryId);
         bool CountryExists(int id);
         bool CountryExists(string country);
         bool AddCountry(Country country);

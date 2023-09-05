@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
-using TennisPlayers.Application.Validators;
+using TennisPlayers.Application.Mediator.Commands.SponsorCommands;
+using TennisPlayers.Application.Mediator.Querries.SponsorQuerries;
 using TennisPlayers.Domain.Models;
-using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -12,19 +11,17 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class SponsorController : Controller
     {
-        public readonly ISponsorService _sponsorService;
-        public readonly IAthleteService _athleteService;
-        public SponsorController(ISponsorService sponsorService, IAthleteService athleteService)
+        private readonly IMediator _mediator;
+        public SponsorController(IMediator mediator)
         {
-            _sponsorService = sponsorService;
-            _athleteService = athleteService;
+            _mediator = mediator;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllSponsors()
         {
-            var result = await _sponsorService.GetAllSponsors();
-            return Ok(result);
+            var result = await _mediator.Send(new GetAllSponsorsQuerry());
+            return result != null ? Ok(result) : NotFound("There are no sponsors.");
         }
 
         [HttpGet("[action]/{sponsorId}")]
@@ -32,11 +29,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorById(int sponsorId)
         {
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor does not exist");
-
-            var sponsor = _sponsorService.GetSponsorById(sponsorId);
-            return Ok(sponsor);
+            var result = await _mediator.Send(new GetSponsorByIdQuerry(sponsorId));
+            return result != null ? Ok(result) : NotFound($"There is no sponsor by id {sponsorId}.");
         }
 
         [HttpGet("[action]/{sponsorName}")]
@@ -44,11 +38,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorByName(string sponsorName)
         {
-            if (!_sponsorService.SponsorExists(sponsorName))
-                return NotFound("Sponsor does not exist");
-
-            var sponsor = _sponsorService.GetSponsorByName(sponsorName);
-            return Ok(sponsor);
+            var result = await _mediator.Send(new GetSponsorByNameQuerry(sponsorName));
+            return result != null ? Ok(result) : NotFound($"There is no sponsor by last name {sponsorName}.");
         }
 
         [HttpGet("[action]/{netWorth}")]
@@ -56,89 +47,40 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetSponsorByNW(decimal netWorth)
         {
-            var sponsor = await _sponsorService.GetSponsorsByNW(netWorth);
-            return Ok(sponsor);
+            var result = await _mediator.Send(new GetSponsorsByNWQuerry(netWorth));
+            return result != null ? Ok(result) : NotFound($"There are no sponsor with net worth higher than {netWorth}.");
         }
 
         [HttpPost("AddSponsor")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddSponsor([FromBody] SponsorDto sponsorDto)
-        {
-            var validator = new SponsorValidator();
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (!_sponsorService.AddSponsor(sponsorDto))
-            {
-                ModelState.AddModelError("", "Error adding new sponsor.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(sponsorDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Sponsor added successfully.");
-        }
-
-        [HttpPost("AddSponsorToAthlete")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult AddSponsorToAthlete([FromQuery] int athleteId, int sponsorId)
+        public async Task<IActionResult> AddSponsor([FromBody] SponsorDto sponsorDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_athleteService.AthleteExists(athleteId))
-                return NotFound("Athlete does not exist");
-
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor does not exist");
-
-            if (!_sponsorService.AddSponsorToAthlete(athleteId, sponsorId))
-            {
-                ModelState.AddModelError("", "Error adding thlete to sponsor.");
-                return BadRequest(ModelState);
-            }
-
-            return Ok("Successfully added Sponsor to Athlete.");
+            var result = await _mediator.Send(new CreateSponsorCommand(sponsorDto));
+            return result == true ? StatusCode(200, "Sponsor added successfully.") : BadRequest("Sponsor is not added successfully.");
         }
 
         [HttpPut("UpdateSponsor")]
-        public IActionResult UpdateSponsor(int sponsorId, [FromBody] SponsorDto sponsorDto)
+        public async Task<IActionResult> UpdateSponsor(int sponsorId, [FromBody] SponsorDto sponsorDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor does not exist.");
-
-            if (!_sponsorService.UpdateSponsor(sponsorId, sponsorDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateSponsorCommand(sponsorDto, sponsorId));
+            return result == true ? StatusCode(200, "Sponsor updated successfully.") : BadRequest($"There is no sponsor by id {sponsorId}.");
         }
 
         [HttpDelete("DeleteSponsor")]
         public async Task<IActionResult> DeleteSponsor(int sponsorId)
         {
-            if (!_sponsorService.SponsorExists(sponsorId))
-                return NotFound("Sponsor not found.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);  
 
-            var sponsorToDelete = _sponsorService.GetSponsorById(sponsorId);
-
-            if (!_sponsorService.DeleteSponsor(sponsorToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
-                return BadRequest(ModelState);
-            }
-
-            return Ok("Sponsor deleted successfully.");
+            var result = await _mediator.Send(new DeleteSponsorCommand(sponsorId));
+            return result == true ? StatusCode(200, "Sponsor deleted successfully.") : NotFound($"There is no sponsor by id {sponsorId}.");
         }
     }
 }

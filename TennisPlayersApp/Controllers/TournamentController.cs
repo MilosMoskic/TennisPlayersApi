@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Services;
-using TennisPlayers.Application.Validators;
+using TennisPlayers.Application.Mediator.Commands.TournamentCommands;
+using TennisPlayers.Application.Mediator.Querries.TournamentQuerries;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
@@ -11,19 +11,17 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class TournamentController : Controller
     {
-        private readonly ITournamentService _tournamentService;
-        private readonly ILocationService _locationService;
-        public TournamentController(ITournamentService tournamentService, ILocationService locationService)
+        private readonly IMediator _mediator;
+        public TournamentController(IMediator mediator)
         {
-            _tournamentService = tournamentService;
-            _locationService = locationService;
+            _mediator = mediator;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllTournaments()
         {
-            var result = await _tournamentService.GetAllTournaments();
-            return Ok(result);
+            var result = await _mediator.Send(new GetAllTournamentsQuerry());
+            return result != null ? Ok(result) : NotFound("There are no tournaments.");
         }
 
         [HttpGet("[action]/{tournamentId}")]
@@ -31,11 +29,8 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTournamentById(int tournamentId)
         {
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist");
-
-            var tournament = _tournamentService.GetTournamentById(tournamentId);
-            return Ok(tournament);
+            var result = await _mediator.Send(new GetTournamentByIdQuerry(tournamentId));
+            return result != null ? Ok(result) : NotFound($"There is no tournament by id {tournamentId}.");
         }
 
         [HttpGet("[action]/{tournamentName}")]
@@ -43,72 +38,40 @@ namespace iTennisPlayersApi.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetTournamentByName(string tournamentName)
         {
-            if (!_tournamentService.TournamentExists(tournamentName))
-                return NotFound("Tournament does not exist");
-
-            var tournament = _tournamentService.GetTournamentByName(tournamentName);
-            return Ok(tournament);
+            var result = await _mediator.Send(new GetTournamentByNameQuerry(tournamentName));
+            return result != null ? Ok(result) : NotFound($"There is no tournament by name {tournamentName}.");
         }
 
         [HttpPost("AddTournament")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
+        public async Task<IActionResult> AddTournament([FromQuery] int locationId,[FromBody] TournamentDto tournamentDto)
         {
-            var validator = new TournamentValidator();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_locationService.LocationExists(locationId))
-                return NotFound("Location does not exist");
-
-            if (!_tournamentService.AddTournament(locationId, tournamentDto))
-            {
-                ModelState.AddModelError("", "Error adding new tournament.");
-                return BadRequest(ModelState);
-            }
-
-            var validationResult = validator.Validate(tournamentDto);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult);
-            }
-
-            return Ok("Tournament added successfully.");
+            var result = await _mediator.Send(new CreateTournamentCommand(tournamentDto, locationId));
+            return result == true ? StatusCode(200, "Tournament added successfully.") : BadRequest("Tournament is not added successfully.");
         }
 
         [HttpPut("UpdateTournament")]
-        public IActionResult UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
+        public async Task<IActionResult> UpdateTournament(int tournamentId, [FromBody] TournamentDto tournamentDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament does not exist.");
-
-            if (!_tournamentService.UpdateTournament(tournamentId, tournamentDto))
-                return BadRequest("Error while saving.");
-
-            return StatusCode(200, "Successfully updated.");
+            var result = await _mediator.Send(new UpdateTournamentCommand(tournamentId, tournamentDto));
+            return result == true ? StatusCode(200, "Tournament updated successfully.") : BadRequest("Tournament is not updated successfully.");
         }
 
         [HttpDelete("DeleteTournament")]
         public async Task<IActionResult> DeleteTournament(int tournamentId)
         {
-            if (!_tournamentService.TournamentExists(tournamentId))
-                return NotFound("Tournament not found.");
-
-            var tournamentToDelete = _tournamentService.GetTournamentById(tournamentId);
-
-            if (!_tournamentService.DeleteTournament(tournamentToDelete))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving.");
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            }
 
-            return Ok("Tournament deleted successfully.");
+            var result = await _mediator.Send(new DeleteTournamentCommand(tournamentId));
+            return result == true ? StatusCode(200, "Tournament deleted successfully.") : NotFound($"There is no tournament by id {tournamentId}.");
         }
     }
 }

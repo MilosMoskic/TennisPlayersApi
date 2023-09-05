@@ -7,6 +7,7 @@ namespace TennisPlayers.Domain.Interfaces
         Task<List<Location>> GetAllLocations();
         Location GetLocation(int id);
         Location GetLocation(string name);
+        Task<Location> GetLocationByLocationIdAsNoTracking(int locationId);
         bool LocationExists(int id);
         bool LocationExists(string name);
         bool AddLocation(Location location);

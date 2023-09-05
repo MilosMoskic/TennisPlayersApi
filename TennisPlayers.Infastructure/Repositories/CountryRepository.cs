@@ -50,6 +50,10 @@ namespace TennisPlayers.Infastructure.Repositories
         {
             return _context.Countries.Where(c => c.Name == name).FirstOrDefault();
         }
+        public async Task<Country> GetCountryByCountryIdAsNoTracking(int countryId)
+        {
+            return await _context.Countries.Where(c => c.Id == countryId).AsNoTracking().FirstOrDefaultAsync();
+        }
 
         public bool Save()
         {

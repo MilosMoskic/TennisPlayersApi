@@ -28,8 +28,8 @@ namespace TennisPlayers.Application.Services
 
         public bool DeleteTournament(TournamentDto tournamentDto)
         {
-            var tournmanet = _mapper.Map<Tournament>(tournamentDto);
-            return _tournamentRepository.DeleteTournament(tournmanet);
+            var tournament = _mapper.Map<Tournament>(tournamentDto);
+            return _tournamentRepository.DeleteTournament(tournament);
         }
 
         public async Task<List<TournamentDto>> GetAllTournaments()
@@ -69,6 +69,12 @@ namespace TennisPlayers.Application.Services
             tournamentMapped.Id = tournamentId;
 
             return _tournamentRepository.UpdateTournament(tournamentMapped);
+        }
+        public async Task<TournamentDto> GetTournamentByTournamentIdAsNoTracking(int tournamentId)
+        {
+            var tournament = await _tournamentRepository.GetTournamentByTournamentIdAsNoTracking(tournamentId);
+            var tournamentMapper = _mapper.Map<TournamentDto>(tournament);
+            return tournamentMapper;
         }
     }
 }

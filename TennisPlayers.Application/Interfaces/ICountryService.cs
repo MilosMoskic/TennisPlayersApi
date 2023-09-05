@@ -4,13 +4,14 @@ namespace TennisPlayers.Application.Interfaces
 {
     public interface ICountryService
     {
-        public Task<List<CountryDto>> GetAllCountries();
-        public CountryDto GetCountryById(int id);
-        public CountryDto GetCountryByName(string name);
-        public bool CountryExists(int id);
-        public bool CountryExists(string country);
-        public bool AddCountry(CountryDto countryDto);
-        public bool UpdateCountry(int countryId, CountryDto countryDto);
-        public bool DeleteCountry(CountryDto countryDto);
+        Task<List<CountryDto>> GetAllCountries();
+        CountryDto GetCountryById(int id);
+        CountryDto GetCountryByName(string name);
+        Task<CountryDto> GetCountryByCountryIdAsNoTracking(int countryId);
+        bool CountryExists(int id);
+        bool CountryExists(string country);
+        bool AddCountry(CountryDto countryDto);
+        bool UpdateCountry(int countryId, CountryDto countryDto);
+        bool DeleteCountry(CountryDto countryDto);
     }
 }

@@ -5,19 +5,18 @@ namespace TennisPlayers.Domain.Interfaces
     public interface IAthleteRepository
     {
         Task<List<Athlete>> GetAllAthletes();
+        Task<Athlete> GetAthleteAsync(int id);
         Athlete GetAthlete(int id);
         Athlete GetAthlete(string lastName);
         Athlete GetAthleteByRanking(int ranking);
-        public decimal GetAthleteWinPercent(string name);
-        ICollection<Athlete> GetAthletesByTournament(int tournamentId);
+        decimal GetAthleteWinPercent(string name);
         ICollection<Athlete> GetAthletesBySponsor(int sponsorId);
+        Task<Athlete> GetAthleteByAthleteIdAsNoTracking(int athleteId);
         bool AthleteExists(int id);
         bool AthleteExists(string name);
         bool AddAthlete(Coach coach, Country country, Athlete athlete);
-        bool AddAthleteToTournament(Athlete athlete, Tournament tournament);
         bool UpdateAthlete(Athlete athlete);
         bool DeleteAthlete(Athlete athlete);
-        bool RemoveAthleteFromTournament(int athleteId, int tournamentId);
         bool RemoveAthleteFromSponsor(int athleteId, int sponsorId);
         bool Save();
     }

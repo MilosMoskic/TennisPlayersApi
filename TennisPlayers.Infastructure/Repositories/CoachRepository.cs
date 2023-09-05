@@ -51,6 +51,11 @@ namespace TennisPlayers.Infastructure.Repositories
             return _context.Coaches.Where(c => c.LastName == lastName).ToList();
         }
 
+        public async Task<Coach> GetCoachByCoachIdAsNoTracking(int coachId)
+        {
+            return await _context.Coaches.Where(c => c.Id == coachId).AsNoTracking().FirstOrDefaultAsync();
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
