@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Mediator.Querries.AthleteQuerries;
 using TennisPlayers.Application.Mediator.Querries.AthleteTournamentQuerries;
-using TennisPlayers.Application.Services;
-using TennisPlayers.Domain.Models;
 
 namespace TennisPlayers.Application.Mediator.Handlers.AthleteTournamentHandlers
 {

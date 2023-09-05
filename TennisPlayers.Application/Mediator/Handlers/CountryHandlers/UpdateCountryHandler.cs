@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.CountryCommands;
-using TennisPlayers.Application.Services;
 
 namespace TennisPlayers.Application.Mediator.Handlers.CountryHandlers
 {

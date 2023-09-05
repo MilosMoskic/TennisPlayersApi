@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 

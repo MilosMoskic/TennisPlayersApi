@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.AthleteSponsorCommands;
-using TennisPlayers.Application.Services;
 
 namespace TennisPlayers.Application.Mediator.Handlers.AthleteSponsorHandlers
 {

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.TournamentCommands;
-using TennisPlayers.Application.Services;
 
 namespace TennisPlayers.Application.Mediator.Handlers.TournamentHandlers
 {
