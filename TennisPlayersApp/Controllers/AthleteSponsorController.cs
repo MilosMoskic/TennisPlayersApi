@@ -20,14 +20,14 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetSponsorsOfAthleteQuerry(int athleteId)
         {
             var result = await _mediator.Send(new GetSponsorsOfAthleteQuerry(athleteId));
-            return result != null ? Ok(result) : NotFound("Sponsor does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no athlete by id {athleteId}.");
         }
 
         [HttpGet("[action]/{sponsorId}")]
         public async Task<IActionResult> GetAthletesBySponsorQuerry(int sponsorId)
         {
             var result = await _mediator.Send(new GetAthletesBySponsorQuerry(sponsorId));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no sponsor by id {sponsorId}.");
         }
 
         [HttpPost("AddSponsorToAthlete")]
@@ -39,7 +39,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new AddSponsorToAthleteCommand(sponsorId, athleteId, athleteSponsorDto));
-            return result != null ? Ok(result) : NotFound("Sponsor does not exist.");
+            return result != null ? Ok(result) : NotFound("Sponsor or athlete does not exist.");
         }
 
         [HttpDelete("RemoveSponsorFromAthlete")]
@@ -51,7 +51,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new RemoveSponsorFromAthleteCommand(athleteId, sponsorId));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
+            return result != null ? Ok(result) : NotFound("Sponsor or athlete does not exist.");
         }
     }
 }

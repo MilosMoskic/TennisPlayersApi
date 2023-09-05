@@ -31,7 +31,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetAthleteById(int athleteId)
         {
             var result = await _mediator.Send(new GetAthleteByIdQuerry(athleteId));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no athlete by id {athleteId}.");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -40,7 +40,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetAthleteByLastName(string lastName)
         {
             var result = await _mediator.Send(new GetAthleteByNameQuerry(lastName));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no athlete by last name {lastName}.");
         }
 
         [HttpGet("[action]/{ranking}")]
@@ -58,7 +58,7 @@ namespace iTennisPlayersApi.Controllers
         public IActionResult GetAthletesWinPercent(string lastName)
         {
             var result = _mediator.Send(new GetAthleteWinPercentQuerry(lastName));
-            return result != null ? Ok(result) : NotFound("Athlete does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no athlete by last name {lastName}.");
         }
 
         [HttpPost("AddAthelete")]
@@ -80,7 +80,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new UpdateAthleteCommand(athleteDto, athleteId));
-            return result == true ? StatusCode(200, "Athlete updated successfully.") : BadRequest("Athlete does not exist.");
+            return result == true ? StatusCode(200, "Athlete updated successfully.") : BadRequest($"There is no athlete by id {athleteId}.");
         }
 
         [HttpDelete("DeleteAthlete")]
@@ -90,7 +90,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new DeleteAthleteCommand(athleteId));
-            return result == true ? StatusCode(200, "Athlete deleted successfully.") : NotFound("Athlete does not exist.");
+            return result == true ? StatusCode(200, "Athlete deleted successfully.") : NotFound($"There is no athlete by id {athleteId}.");
         }
     }
 }

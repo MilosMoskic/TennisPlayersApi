@@ -1,14 +1,9 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 using TennisPlayers.Application.Mediator.Querries.CoachQuerries;
-using TennisPlayers.Application.Services;
 using TennisPlayers.Domain.Models;
-using TennisPlayers.Domain.Validators;
 
 namespace iTennisPlayersApi.Controllers
 {
@@ -16,20 +11,18 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class CoachController : Controller
     {
-        private readonly ICoachService _coachService;
         private readonly IMediator _mediator;
 
-        public CoachController(IMediator mediator, ICoachService coachService)
+        public CoachController(IMediator mediator)
         {
             _mediator = mediator;
-            _coachService = coachService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllCoaches()
         {
             var result = await _mediator.Send(new GetAllCoachesQuerry());
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound("There are no coaches.");
         }
 
         [HttpGet("[action]/{coachId}")]
@@ -38,7 +31,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetCoachById(int coachId)
         {
             var result = await _mediator.Send(new GetCoachByIdQuerry(coachId));
-            return result != null ? Ok(result) : NotFound("Coach does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no coach by id {coachId}");
         }
 
         [HttpGet("[action]/{lastName}")]
@@ -47,7 +40,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetCoachByLastName(string lastName)
         {
             var result = await _mediator.Send(new GetCoachesByLastNameQuerry(lastName));
-            return result != null ? Ok(result) : NotFound("Coach does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no coach by last name {lastName}");
         }
 
         [HttpPost("AddCoach")]
@@ -59,7 +52,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new CreateCoachCommand(coachDto));
-            return result == true ? StatusCode(200, "Coach added successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Coach added successfully.") : BadRequest("Coach is not added successfully.");
         }
 
         [HttpPut("UpdateCoach")]
@@ -69,7 +62,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new UpdateCoachCommand(coachDto, coachId));
-            return result == true ? StatusCode(200, "Coach updated successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Coach updated successfully.") : BadRequest("Coach does not exist.");
         }
 
         [HttpDelete("DeleteCoach")]

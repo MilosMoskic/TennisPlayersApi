@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
 using TennisPlayers.Application.Mediator.Commands.AthleteTournamentCommands;
 using TennisPlayers.Application.Mediator.Querries.AthleteTournamentQuerries;
 
@@ -20,7 +19,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetAthletesByTournament(int tournamentId)
         {
             var result = await _mediator.Send(new GetAthletesByTournamentQuerry(tournamentId));
-            return result != null ? Ok(result) : NotFound("Tournament does not exist.");
+            return result != null ? Ok(result) : NotFound($"There are no athletes in tournament by id {tournamentId}.");
         }
 
         [HttpPost("AddAtheleteToTournament")]
@@ -32,7 +31,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new AddAthleteToTournamentCommand(athleteId, tournamentId, athleteTournamentDto));
-            return result != null ? Ok(result) : NotFound("Tournament does not exist.");
+            return result != null ? Ok(result) : NotFound("Tournament or athlete does not exist.");
         }
 
         [HttpDelete("RemoveAthleteFromTournament")]
@@ -44,7 +43,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new RemoveAthleteFromTournamentCommand(athleteId, tournamentId));
-            return result != null ? Ok(result) : NotFound("Tournament does not exist.");
+            return result != null ? Ok(result) : NotFound("Tournament or athlete does not exist.");
         }
     }
 }

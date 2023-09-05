@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using TennisPlayers.Application.Dto;
 using TennisPlayers.Application.Mediator.Commands.TournamentCommands;
 using TennisPlayers.Application.Mediator.Querries.TournamentQuerries;
 using TennisPlayers.Domain.Models;
@@ -12,20 +12,16 @@ namespace iTennisPlayersApi.Controllers
     public class TournamentController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly ITournamentService _tournamentService;
-        private readonly ILocationService _locationService;
-        public TournamentController(IMediator mediator, ITournamentService tournamentService, ILocationService locationService)
+        public TournamentController(IMediator mediator)
         {
             _mediator = mediator;
-            _tournamentService = tournamentService;
-            _locationService = locationService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllTournaments()
         {
             var result = await _mediator.Send(new GetAllTournamentsQuerry());
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound("There are no tournaments.");
         }
 
         [HttpGet("[action]/{tournamentId}")]
@@ -34,7 +30,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetTournamentById(int tournamentId)
         {
             var result = await _mediator.Send(new GetTournamentByIdQuerry(tournamentId));
-            return result != null ? Ok(result) : NotFound();
+            return result != null ? Ok(result) : NotFound($"There is no tournament by id {tournamentId}.");
         }
 
         [HttpGet("[action]/{tournamentName}")]
@@ -43,7 +39,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetTournamentByName(string tournamentName)
         {
             var result = await _mediator.Send(new GetTournamentByNameQuerry(tournamentName));
-            return result != null ? Ok(result) : NotFound();
+            return result != null ? Ok(result) : NotFound($"There is no tournament by name {tournamentName}.");
         }
 
         [HttpPost("AddTournament")]
@@ -55,7 +51,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new CreateTournamentCommand(tournamentDto, locationId));
-            return result == true ? StatusCode(200, "Tournament added successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Tournament added successfully.") : BadRequest("Tournament is not added successfully.");
         }
 
         [HttpPut("UpdateTournament")]
@@ -65,7 +61,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new UpdateTournamentCommand(tournamentId, tournamentDto));
-            return result == true ? StatusCode(200, "Tournament updated successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Tournament updated successfully.") : BadRequest("Tournament is not updated successfully.");
         }
 
         [HttpDelete("DeleteTournament")]
@@ -75,7 +71,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new DeleteTournamentCommand(tournamentId));
-            return result == true ? StatusCode(200, "Tournament deleted successfully.") : NotFound("Tournament does not exist.");
+            return result == true ? StatusCode(200, "Tournament deleted successfully.") : NotFound($"There is no tournament by id {tournamentId}.");
         }
     }
 }

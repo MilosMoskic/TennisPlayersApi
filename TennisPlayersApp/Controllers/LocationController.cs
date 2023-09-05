@@ -1,11 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TennisPlayers.Application.Dto;
-using TennisPlayers.Application.Interfaces;
-using TennisPlayers.Application.Mediator.Commands.CoachCommands;
 using TennisPlayers.Application.Mediator.Commands.LocationCommands;
 using TennisPlayers.Application.Mediator.Querries.LocationQuerries;
-using TennisPlayers.Application.Validators;
 using TennisPlayers.Domain.Models;
 
 namespace iTennisPlayersApi.Controllers
@@ -14,19 +11,17 @@ namespace iTennisPlayersApi.Controllers
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
-        private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
-        public LocationController(IMediator mediator, ILocationService locationService)
+        public LocationController(IMediator mediator)
         {
             _mediator = mediator;
-            _locationService = locationService;
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllLocations()
         {
             var result = await _mediator.Send(new GetAllLocationsQuerry());
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound("There are no locations.");
         }
 
         [HttpGet("[action]/{locationId}")]
@@ -35,7 +30,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetLocationById(int locationId)
         {
             var result = await _mediator.Send(new GetLocationByIdQuerry(locationId));
-            return result != null ? Ok(result) : NotFound("Location does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no location by id {locationId}");
         }
 
         [HttpGet("[action]/{locationName}")]
@@ -44,7 +39,7 @@ namespace iTennisPlayersApi.Controllers
         public async Task<IActionResult> GetLocationByName(string locationName)
         {
             var result = await _mediator.Send(new GetLocationByNameQuerry(locationName));
-            return result != null ? Ok(result) : NotFound("Location does not exist.");
+            return result != null ? Ok(result) : NotFound($"There is no location by name {locationName}");
         }
 
         [HttpPost("AddLocation")]
@@ -56,7 +51,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new CreateLocationCommand(locationDto));
-            return result == true ? StatusCode(200, "Location added successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Location added successfully.") : BadRequest("Location is not added successfully.");
         }
 
         [HttpPut("UpdateLocation")]
@@ -66,7 +61,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new UpdateLocationCommand(locationDto, locationId));
-            return result == true ? StatusCode(200, "Location updated successfully.") : BadRequest(ModelState);
+            return result == true ? StatusCode(200, "Location updated successfully.") : BadRequest($"There is no location by id {locationId}");
         }
 
         [HttpDelete("DeleteLocation")]
@@ -76,7 +71,7 @@ namespace iTennisPlayersApi.Controllers
                 return BadRequest(ModelState);
 
             var result = await _mediator.Send(new DeleteLocationCommand(locationId));
-            return result == true ? StatusCode(200, "Location deleted successfully.") : NotFound("Location does not exist.");
+            return result == true ? StatusCode(200, "Location deleted successfully.") : NotFound($"There is no location by id {locationId}");
         }
     }
 }
