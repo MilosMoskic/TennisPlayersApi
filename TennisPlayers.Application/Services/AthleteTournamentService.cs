@@ -28,13 +28,11 @@ namespace TennisPlayers.Application.Services
         {
             var athlete = _athleteRepository.GetAthlete(athleteId);
             var tournament = _tournamentRepository.GetTournament(tournamentId);
-            var athleteMapped = _mapper.Map<Athlete>(athlete);
-            var tournamentMapped = _mapper.Map<Tournament>(tournament);
 
             var athleteTournamentMapped = _mapper.Map<AthleteTournament>(athleteTournamentDto);
 
-            athleteTournamentMapped.Tournament = tournamentMapped;
-            athleteTournamentMapped.Athlete = athleteMapped;
+            athleteTournamentMapped.Tournament = tournament;
+            athleteTournamentMapped.Athlete = athlete;
 
             return _athleteTournamentRepository.AddAthleteToTournament(athleteTournamentMapped);
         }

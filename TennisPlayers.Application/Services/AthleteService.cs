@@ -11,19 +11,16 @@ namespace TennisPlayers.Application.Services
         private readonly IAthleteRepository _athleteRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly ICoachRepository _coachRepository;
-        private readonly ITournamentRepository _tournamentRepository;
         private readonly IMapper _mapper;
 
         public AthleteService(IAthleteRepository athleteRepository, 
             ICoachRepository coachRepository, 
             ICountryRepository countryRepository,
-            ITournamentRepository tournamentRepository,
             IMapper mapper)
         {
             _athleteRepository = athleteRepository;
             _coachRepository = coachRepository;
             _countryRepository = countryRepository;
-            _tournamentRepository = tournamentRepository;
             _mapper = mapper;
         }
 

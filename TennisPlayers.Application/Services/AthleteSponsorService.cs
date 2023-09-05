@@ -25,13 +25,11 @@ namespace TennisPlayers.Application.Services
         {
             var athlete = _athleteRepository.GetAthlete(athleteId);
             var sponsor = _sponsorRepository.GetSponsor(sponsorId);
-            var athleteMapped = _mapper.Map<Athlete>(athlete);
-            var sponsorMapped = _mapper.Map<Sponsor>(sponsor);
 
             var athleteSponsorMapped = _mapper.Map<AthleteSponsor>(athleteSponsorDto);
 
-            athleteSponsorMapped.Sponsor = sponsorMapped;
-            athleteSponsorMapped.Athlete = athleteMapped;
+            athleteSponsorMapped.Sponsor = sponsor;
+            athleteSponsorMapped.Athlete = athlete;
 
             return _athleteSponsorRepository.AddSponsorToAthlete(athleteSponsorMapped);
         }
