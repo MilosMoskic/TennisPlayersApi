@@ -4,7 +4,7 @@ namespace TennisPlayers.Application.Interfaces
 {
     public interface IAthleteTournamentService
     {
-        public bool AddAthleteToTournament(int athleteId, int tournamentId, AthleteTournamentDto athleteTournamentDto);
+        bool AddAthleteToTournament(int athleteId, int tournamentId, AthleteTournamentDto athleteTournamentDto);
         Task<List<AthleteDto>> GetAthletesByTournament(int tournamentId);
         bool RemoveAthleteFromTournament(int athleteId, int tournamentId);
     }

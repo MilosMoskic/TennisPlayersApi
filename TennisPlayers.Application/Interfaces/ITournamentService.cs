@@ -4,14 +4,14 @@ namespace TennisPlayers.Application.Interfaces
 {
     public interface ITournamentService
     {
-        public Task<List<TournamentDto>> GetAllTournaments();
-        public TournamentDto GetTournamentById(int id);
-        public TournamentDto GetTournamentByName(string name);
-        public Task<TournamentDto> GetTournamentByTournamentIdAsNoTracking(int tournamentId);
-        public bool TournamentExists(int id);
-        public bool TournamentExists(string name);
-        public bool AddTournament(int locationId, TournamentDto tournament);
-        public bool UpdateTournament(int tournamentId, TournamentDto tournamentDto);
-        public bool DeleteTournament(TournamentDto tournamentDto);
+        Task<List<TournamentDto>> GetAllTournaments();
+        TournamentDto GetTournamentById(int id);
+        TournamentDto GetTournamentByName(string name);
+        Task<TournamentDto> GetTournamentByTournamentIdAsNoTracking(int tournamentId);
+        bool TournamentExists(int id);
+        bool TournamentExists(string name);
+        bool AddTournament(int locationId, TournamentDto tournament);
+        bool UpdateTournament(int tournamentId, TournamentDto tournamentDto);
+        bool DeleteTournament(TournamentDto tournamentDto);
     }
 }

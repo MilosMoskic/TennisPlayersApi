@@ -4,18 +4,18 @@ namespace TennisPlayers.Application.Interfaces
 {
     public interface IAthleteService
     {
-        public Task<List<AthleteDto>> GetAllAthletes();
-        public AthleteDto GetAthleteById(int id);
-        public AthleteDto GetAthleteByName(string name);
-        public AthleteDto GetAthleteByRanking(int ranking);
-        public Task<List<AthleteDto>> GetAthletesBySponsor(int sponsorId);
-        public decimal GetAthleteWinPercent(string name);
-        public Task<AthleteDto> GetAthleteByAthleteIdAsNoTracking(int athleteId);
-        public bool AthleteExists(int id);
-        public bool AthleteExists(string name);
-        public bool AddAthlete(int coachId, int countryId, AthleteDto athlete);
-        public bool UpdateAthlete(int athleteId, AthleteDto athleteDto);
-        public bool RemoveAthleteFromSponsor(int athleteId, int sponsorId);
-        public bool DeleteAthlete(AthleteDto athleteDto);
+        Task<List<AthleteDto>> GetAllAthletes();
+        AthleteDto GetAthleteById(int id);
+        AthleteDto GetAthleteByName(string name);
+        AthleteDto GetAthleteByRanking(int ranking);
+        Task<List<AthleteDto>> GetAthletesBySponsor(int sponsorId);
+        decimal GetAthleteWinPercent(string name);
+        Task<AthleteDto> GetAthleteByAthleteIdAsNoTracking(int athleteId);
+        bool AthleteExists(int id);
+        bool AthleteExists(string name);
+        bool AddAthlete(int coachId, int countryId, AthleteDto athlete);
+        bool UpdateAthlete(int athleteId, AthleteDto athleteDto);
+        bool RemoveAthleteFromSponsor(int athleteId, int sponsorId);
+        bool DeleteAthlete(AthleteDto athleteDto);
     }
 }
