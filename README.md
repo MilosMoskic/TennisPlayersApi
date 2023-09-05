@@ -1,5 +1,26 @@
 # TennisPlayersApp
 
+Web api with CRUD operations for tennis players.
+
+## Instructions
+
+When you download the project, open the Project Manager Console and type the command "add-migration (migration name)". After the migration is created, type "update-database" command for upating the database.
+
+## Built with
+
+- ASP.NET Core
+- ASP.NET Web Api
+- Class Libraries
+- Swagger UI
+- Entity Framework (EF) Core
+- Microsoft SQL Server Managment Studio
+- Dependency Injection
+- SOLID
+- Repository Pattern
+- Mediator
+- FluentValidation
+- AutoMapper
+
 ## UML Diagram
 
 ![uml](https://github.com/MilosMoskic/TennisPlayersApi/assets/93045390/9922235e-10bf-4564-85d8-01ba4995e436)
