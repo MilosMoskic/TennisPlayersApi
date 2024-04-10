@@ -28,3 +28,8 @@ When you download the project, open the Project Manager Console and type the com
 ## Database Diagram (MSSQL)
 
 ![Screenshot 2023-07-09 140326](https://github.com/MilosMoskic/TennisPlayersApi/assets/93045390/f285c513-32aa-47a1-a51f-3c013be83ce8)
+
+# Author
+
+- GitHub - [@MilosMoskic](https://github.com/MilosMoskic)
+- LinkedIn - [@milos_moskic](https://www.linkedin.com/in/milosmoskic/)
